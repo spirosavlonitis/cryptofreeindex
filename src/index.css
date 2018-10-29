@@ -12,3 +12,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* Navbar images */
+.NavImg {
+	height: 20px;
+	width: 20px;
+}
+
+/* USD price images */
+.home_price_image {
+  width: 110px;
+  height: 110px;
+}
+
+.home_price {
+  font-size: 30px;
+  font-weight: bolder;
+}
