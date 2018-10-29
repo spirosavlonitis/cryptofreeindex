@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
+import Dashboard from './dashboard'
 import Image from 'react-bootstrap/lib/Image'
-
 
 class App extends Component {
   render() {
@@ -15,14 +15,7 @@ class App extends Component {
 						</ul>
 						<div className="tab-content" >
 							<div className="tab-pane fade in active" id="dashboard" >
-								<div className='row' >
-									<div className="col-md-4">
-									  <div className="usd_field" >
-											 <Image src= {"/images/BTC_Logo.png"} className="home_price_image"  />
-									     <font className="home_price" id="usd_BTC" ></font>
-									  </div>
-								  </div>
-								</div>
+									{<Dashboard />}
 							</div>
 						</div>
 					</div>
