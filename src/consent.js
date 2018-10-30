@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CookieConsent, { Cookies } from "react-cookie-consent";
+import CookieConsent from "react-cookie-consent";
 
 class Consent extends Component {
 	render() {

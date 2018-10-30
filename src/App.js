@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import Dashboard from './dashboard'
-import Image from 'react-bootstrap/lib/Image'
+import Tabs from 'react-bootstrap/lib/Tabs'
+import Tab from 'react-bootstrap/lib/Tab'
+import DashBoard from './dashboard'
+import Statistics from './statistics'
 
 class App extends Component {
   render() {
@@ -9,15 +11,14 @@ class App extends Component {
         <div className="container" >
         	<div className="row" >
 					<div className="col-md-12" >
-						<ul className="nav nav-tabs">
-						  <li className="nav active"><a data-toggle="tab" href="#dashboard">Dashboard</a></li>
-						  <li className="nav"><a data-toggle="tab" href="#statistics">Statistics</a></li>
-						</ul>
-						<div className="tab-content" >
-							<div className="tab-pane fade in active" id="dashboard" >
-									{<Dashboard />}
-							</div>
-						</div>
+						<Tabs defaultActiveKey={1} id="uncontrolled-tab-example" >
+							<Tab eventKey={1} title="Dashboard" >
+								{ <DashBoard /> }
+							</Tab>
+							<Tab eventKey={2} title="Statistics" >
+								{ <Statistics /> }
+							</Tab>
+						</Tabs>
 					</div>
         	</div>
         </div>      
