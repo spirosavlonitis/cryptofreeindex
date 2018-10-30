@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 class Ajax {
 
 	constructor() {
@@ -21,6 +23,21 @@ class Ajax {
 				}
 		}
 		xhttp.send();
+	}
+	axios_request() {
+		axios.get(this.url).then(res => {
+			for (let coin in res.data) {
+				let fontElement = document.getElementById(this.curr_coin+'_'+coin)
+				let oldValue = parseFloat(fontElement.innerHTML);
+				fontElement.innerHTML = res.data[coin].USD;
+				if (oldValue < res.data[coin].USD)
+					fontElement.style.color = "green";
+				else if (oldValue > res.data[coin].USD)
+					fontElement.style.color = "red";
+				else
+					fontElement.style.color = "black";
+			}
+		})
 	}
 }
 
