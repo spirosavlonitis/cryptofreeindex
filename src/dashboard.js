@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Image from 'react-bootstrap/lib/Image'
+import axios from 'axios'
 import './dashboard.css'
 
 const coins = [
@@ -20,9 +21,23 @@ const coins = [
 	],
 ];
 
-let curr_coin = "usd";
+const coin_list = coins.map(coin_row => coin_row.map(coin => coin.id)).flat();
+let curr_coin = "USD";
 
 class DashBoard extends Component {
+	
+	state = {
+		coinData: {}
+	}
+
+	componentDidMount() {
+		let url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+coin_list.join()+"&tsyms="+curr_coin;
+		axios.get(url).then(res => {
+			 const coinData = res.data
+			 this.setState({ coinData });
+			})
+	}
+
 	render() {
 		return (
 			<div>
@@ -32,7 +47,9 @@ class DashBoard extends Component {
 							<div className="col-md-4" key={coin.id+"_dashboard"} >
 							  <div className="usd_field" >
 									 <Image src={"/images/"+coin.image} className="home_price_image" />
-							     <font className="home_price" id={curr_coin+"_"+coin.id} ></font>
+							     <font className="home_price" id={curr_coin+"_"+coin.id} >
+											{ this.state.coinData[coin.id] ? this.state.coinData[coin.id].USD : 0 }
+							     </font>
 							  </div>
 						  </div>
 						)}

@@ -18,7 +18,7 @@ class Top extends Component {
 			  <Navbar.Collapse>
 				  <Nav>
 					<NavItem eventKey={1} href="#" className= 'active'>
-					    <Image src= {"/images/usd.png"} className="NavImg" />USD
+					    <Image src= {"/images/usd.png"} className="NavImg" id="USD" />USD
 					</NavItem>
 				  </Nav>
 			 </Navbar.Collapse>
