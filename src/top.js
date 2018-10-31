@@ -29,7 +29,7 @@ class Top extends Component {
   }
 
 	state = {
-	   	activeKey: 1,
+	   	activeKey: 0,
 	}
 	
 	handleSelect(key) {
@@ -50,7 +50,7 @@ class Top extends Component {
 			  <Navbar.Collapse>
 				  <Nav activeKey={this.state.activeKey } onSelect={this.handleSelect} >
 					{ coins.map((coin, index) =>
-							<NavItem eventKey={index} href="#" >
+							<NavItem eventKey={index} href="#" id={index} >
 							  <Image src= {"images/"+coin.image} className="NavImg" />{coin.id}
 							</NavItem>
 						)}
