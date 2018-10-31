@@ -5,9 +5,9 @@ import './dashboard.css'
 
 const coins = [
 	[
-		{ id: "USD", image: "USD_Logo.svg" }, 
+		{ id: "USD", image: "USD_Logo.png" }, 
 		{ id: "EUR", image: "EUR_Logo.svg" },
-		{ id: "GBP", image: "GBP_Logo.svg" }, 
+		{ id: "GBP", image: "GBP_Logo.png" }, 
 	],
 
 	[

@@ -6,6 +6,29 @@ import NavItem from 'react-bootstrap/lib/NavItem'
 import Image from 'react-bootstrap/lib/Image'
 import Ajax from './ajax'
 
+const coins = [
+	[
+		{ id: "USD", image: "USD_Logo.png" }, 
+		{ id: "EUR", image: "EUR_Logo.svg" },
+		{ id: "GBP", image: "GBP_Logo.png" }, 
+	],
+	[
+		{ id: "BTC", image: "BTC_Logo.png" }, 
+		{ id: "LTC", image: "LTC_Logo.png" }, 
+		{ id: "BCH", image: "BCH_Logo.png" },
+	],
+	[
+		{ id: "ETH", image: "ETH_Logo.png" }, 
+		{ id: "ETC", image: "ETC_Logo.svg" }, 
+		{ id: "ZEC", image: "ZEC_Logo.png" },		
+	],
+	[
+		{ id: "DASH", image: "DASH_Logo.png" }, 	
+		{ id: "XMR", image: "XMR_Logo.png" }, 	
+		{ id: "DCR", image: "DCR_Logo.png" }, 	
+	],
+];
+
 class Top extends Component {
 
 	constructor(props) {
@@ -35,11 +58,14 @@ class Top extends Component {
 			  <Navbar.Collapse>
 				  <Nav activeKey={this.state.activeKey } onSelect={this.handleSelect} >
 					<NavItem eventKey={1} href="#" >
-					    <Image src= {"/images/usd.png"} className="NavImg" id="USD" />USD
+					    <Image src= {"/images/USD_Logo.png"} className="NavImg" />USD
 					</NavItem>
 					<NavItem eventKey={2} href="#">
-					    <Image src= {"/images/EUR_Gold_Logo.svg"} className="NavImg" id="EUR" />EUR
+					    <Image src= {"/images/EUR_Logo.svg"} className="NavImg" />EUR
 					</NavItem>
+					<NavItem eventKey={3} href="#">
+					    <Image src= {"/images/GBP_Logo.png"} className="NavImg" />GBP
+					</NavItem>					
 				  </Nav>
 			 </Navbar.Collapse>
 			</Navbar>
