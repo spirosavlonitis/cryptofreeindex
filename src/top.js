@@ -6,9 +6,23 @@ import NavItem from 'react-bootstrap/lib/NavItem'
 import Image from 'react-bootstrap/lib/Image'
 
 class Top extends Component {
+
+	constructor(props) {
+    super(props);
+    this.handleSelect = this.handleSelect.bind(this);
+  }
+
+	state = {
+	   	activeKey: 1,
+	}
+	
+	handleSelect(key) {
+    this.setState({ activeKey: key });
+	}
+
 	render() {
 		return (
-			<Navbar inverse fuild>
+			<Navbar inverse >
 			  <Navbar.Header>
 			    <Navbar.Brand>
 			      <a href="#home">CryptoFreeIndex</a>
@@ -16,15 +30,19 @@ class Top extends Component {
 			    <Navbar.Toggle />
 			  </Navbar.Header>
 			  <Navbar.Collapse>
-				  <Nav>
-					<NavItem eventKey={1} href="#" className= 'active'>
+				  <Nav activeKey={this.state.activeKey } onSelect={this.handleSelect} >
+					<NavItem eventKey={1} href="#" >
 					    <Image src= {"/images/usd.png"} className="NavImg" id="USD" />USD
+					</NavItem>
+					<NavItem eventKey={2} href="#">
+					    <Image src= {"/images/usd.png"} className="NavImg" id="EUR" />EUR
 					</NavItem>
 				  </Nav>
 			 </Navbar.Collapse>
 			</Navbar>
 		)
 	}
+
 }
 
 

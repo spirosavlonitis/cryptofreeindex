@@ -5,6 +5,12 @@ import './dashboard.css'
 
 const coins = [
 	[
+		{ id: "USD", image: "USD_Logo.svg" }, 
+		{ id: "EUR", image: "EUR_Logo.svg" },
+		{ id: "GBP", image: "GBP_Logo.svg" }, 
+	],
+
+	[
 		{ id: "BTC", image: "BTC_Logo.png" }, 
 		{ id: "LTC", image: "LTC_Logo.png" }, 
 		{ id: "BCH", image: "BCH_Logo.png" },
@@ -41,13 +47,13 @@ class DashBoard extends Component {
 	render() {
 		return (
 			<div>
-				{ coins.map(coin_row =>
-					<div className='row dash_row' >
+				{ coins.map((coin_row, index) =>
+					<div className='row dash_row' key={"row_"+index} >
 						{ coin_row.map(coin =>
 							<div className="col-md-4" key={coin.id+"_dashboard"} >
 							  <div className="usd_field" >
 									 <Image src={"/images/"+coin.image} className="home_price_image" />
-							     <font className="home_price" id={curr_coin+"_"+coin.id} >
+							     <font className="home_price" id={"_"+coin.id} >
 											{ this.state.coinData[coin.id] ? this.state.coinData[coin.id].USD : 0 }
 							     </font>
 							  </div>
