@@ -36,7 +36,14 @@ class Ajax {
 
 	cryptoRequest(reset) {
 		this.url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms="+this.currentCoin+"&tsyms="+this.coins.join();
-		
+		axios.get(this.url).then(res => {
+			for (let coin in res.data['RAW'][this.currentCoin]) {
+				let fontElement = document.getElementById('_'+coin);
+				let oldValue = parseFloat(fontElement.innerHTML).toFixed(6);
+				let newValue = res.data['RAW'][this.currentCoin][coin].PRICE.toFixed(6);
+				this.setValue(reset, fontElement, oldValue, newValue);
+			}
+		})
 	}
 
 	dashBoardRequest(reset = false) {
