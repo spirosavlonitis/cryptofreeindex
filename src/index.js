@@ -23,4 +23,4 @@ if (typeof dashBoardTimer != 'undefined') {
 }
 
 if (typeof dashBoardTimer == 'undefined')
-	dashBoardTimer = setInterval( function(){ ajax.axios_request() }, 30000);
+	dashBoardTimer = setInterval( function(){ ajax.dashBoardRequest() }, 30000);
