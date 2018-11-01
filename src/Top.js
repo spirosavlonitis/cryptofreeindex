@@ -40,7 +40,7 @@ class Top extends Component {
 
 	render() {
 		return (
-			<Navbar inverse >
+			<Navbar inverse key="Navbar1" >
 			  <Navbar.Header>
 			    <Navbar.Brand>
 			      <a href="#home">CryptoFreeIndex</a>
@@ -50,7 +50,7 @@ class Top extends Component {
 			  <Navbar.Collapse>
 				  <Nav activeKey={this.state.activeKey } onSelect={this.handleSelect} >
 					{ coins.map((coin, index) =>
-							<NavItem eventKey={index} href="#" id={index} >
+							<NavItem eventKey={index} href="#" id={index} key={"NavItem"+coin.id} >
 							  <Image src= {"images/"+coin.image} className="NavImg" />{coin.id}
 							</NavItem>
 						)}

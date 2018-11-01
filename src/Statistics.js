@@ -44,8 +44,8 @@ class Statistics extends Component {
           value: Math.floor(res.data.Data[i].close)
         };
       this.setChart(chart);
-      this.chart = chart;
     })
+    this.chart = chart;
   }
 
   componentWillUnmount() {
