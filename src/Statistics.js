@@ -9,6 +9,7 @@ am4core.useTheme(am4themes_animated);
 class Statistics extends Component {
   
   setChart(chart) {
+    chart.paddingRight = 20;
     let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.grid.template.location = 0;
 
@@ -28,24 +29,27 @@ class Statistics extends Component {
     chart.scrollbarX = scrollbarX;
   }
 
-  componentDidMount() {
-    let chart = am4core.create("chartdiv", am4charts.XYChart);
-    chart.paddingRight = 20;
-    chart.data = []
 
+  componentDidMount() {
     let days = 365;
     let currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
     let url = "https://min-api.cryptocompare.com/data/histoday?fsym=BTC&tsym="+currentCoin+"&limit="+days+"&aggregate=1&e=CCCAGG";
-    axios.get(url).then(res => {
-      for (let i = 1; i < days+1; i++)
-        chart.data[i] = { 
-          date: new Date(res.data.Data[i].time*1000),
-          name: "name" + i, 
-          value: Math.floor(res.data.Data[i].close)
-        };
+
+    axios.get(url).then(res=> {
+      let chart = am4core.create("chartdiv", am4charts.XYChart);
       this.setChart(chart);
+      
+      chart.data = []
+      for (var i = 0; i < days+1; i++)
+        chart.data[i] = {
+          date: new Date(res.data.Data[i].time*1000),
+          name: "name"+i,
+          value: res.data.Data[i].close
+        };
+      this.chart = chart;
     })
-    this.chart = chart;
+
+    
   }
 
   componentWillUnmount() {
