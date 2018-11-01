@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Tabs from 'react-bootstrap/lib/Tabs'
 import Tab from 'react-bootstrap/lib/Tab'
-import DashBoard from './dashboard'
-import Statistics from './statistics'
+import DashBoard from './Dashboard'
+import Statistics from './Statistics'
 
 class App extends Component {
   render() {

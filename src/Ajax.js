@@ -9,7 +9,6 @@ class Ajax {
 			];
 		this.fiatCurrencies = [ "USD", "EUR", "GBP", ]
 		this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
-		this.url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+this.coins.join()+"&tsyms="+this.curr_coin;
 	}
 
 	setValue(reset, fontElement, oldValue, newValue) {
@@ -53,6 +52,7 @@ class Ajax {
 		else
 			this.cryptoRequest(reset);
 	}
+
 }
 
 export default Ajax

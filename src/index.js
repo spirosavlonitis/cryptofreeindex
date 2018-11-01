@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Top from './top'
+import Top from './Top'
 import App from './App';
 import Consent from './consent'
-import Ajax from './ajax'
+import Ajax from './Ajax'
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render([<Top />, <App />, <Consent />], document.getElementById('root'));
