@@ -17,7 +17,7 @@ const coins = [
 	[
 		{ id: "ETH", image: "ETH_Logo.png" }, 
 		{ id: "ETC", image: "ETC_Logo.svg" }, 
-		{ id: "ZEC", image: "ZEC_Logo.png" },		
+		{ id: "ZEC", image: "ZEC_Logo.svg" },		
 	],
 	[
 		{ id: "DASH", image: "DASH_Logo.png" }, 	
