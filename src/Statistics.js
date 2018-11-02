@@ -44,6 +44,7 @@ class Statistics extends Component {
 
 
   componentDidMount() {
+    window.addEventListener('beforeunload', this.componentCleanup);
     let coins = [
       {id: "BTC", color: "#f2a900"}, {id: "LTC", color: "#d3d3d3"}, {id: "BCH", color: "#4cca47"},
       {id: "ETH", color: "#3385ff"}, {id: "ETC", color: "#669073"}, {id: "ZEC", color: "#f4b728"},
@@ -85,10 +86,15 @@ class Statistics extends Component {
     )
   }
 
-  componentWillUnmount() {
-    if (this.chart) {
+  componentCleanup() {
+    if (this.chart)
       this.chart.dispose();
-    }
+  }
+
+  componentWillUnmount() {
+     if (this.chart)
+      this.chart.dispose();
+
   }
 
 	render() {
