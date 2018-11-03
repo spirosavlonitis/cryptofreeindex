@@ -10,7 +10,10 @@ class Statistics extends Component {
 
   constructor(props) {
     super(props);
-    this.temp = [ "USD", "EUR", "GBP" ]
+    this.navCoins = [ 
+        "USD", "EUR", "GBP", "BTC", "LTC", "BCH",  "ETH", "ETC", "ZEC",
+        "DASH", "XMR", "DCR"
+    ]
     this.coins = [
       {id: "BTC", color: "#f2a900"}, {id: "LTC", color: "#d3d3d3"}, {id: "BCH", color: "#4cca47"},
       {id: "ETH", color: "#3385ff"}, {id: "ETC", color: "#669073"}, {id: "ZEC", color: "#f4b728"},
@@ -59,11 +62,11 @@ class Statistics extends Component {
   componentDidMount() {
     let days = 365;    
     let urls = []
-    for (var i = 0; i < this.coins.length; i++) {
-      if (this.currentCoin === this.coins[i])
-        continue;
-      urls[i] = "https://min-api.cryptocompare.com/data/histoday?fsym="+this.coins[i].id+"&tsym="+this.currentCoin+"&limit="+days+"&aggregate=1&e=CCCAGG";
-    }; 
+    for (var i = 0; i < this.coins.length; i++)
+      if(this.navCoins.slice(0,3).includes(this.currentCoin))
+        urls[i] = "https://min-api.cryptocompare.com/data/histoday?fsym="+this.coins[i].id+"&tsym="+this.currentCoin+"&limit="+days+"&aggregate=1&e=CCCAGG";
+      else
+        urls[i] = "https://min-api.cryptocompare.com/data/histoday?fsym="+this.currentCoin+"&tsym="+this.coins[i].id+"&limit="+days+"&aggregate=1&e=CCCAGG";
     axios.all([
         axios.get(urls[0]), axios.get(urls[1]), axios.get(urls[2]),
         axios.get(urls[3]), axios.get(urls[4]), axios.get(urls[5]),
@@ -72,31 +75,45 @@ class Statistics extends Component {
       .then(axios.spread( (btcRes, ltcRes, bchRes, ethRes, etcRes, zecRes, dashRes, xmrRes, dcrRes) => {
           let chart = am4core.create("chartdiv", am4charts.XYChart);
           this.setChart(chart, this.coins);
+          
+          let results = [btcRes, ltcRes, bchRes, ethRes, etcRes, zecRes, dashRes, xmrRes, dcrRes];
+          let dateRes = undefined;
+          for (let i in results)
+            if (results[i].data.Response !== "Error") {
+              dateRes = results[i];
+              break;
+            }
 
-          chart.data = []
-          if (btcRes.data.Data !== undefined)
-            for (var i = 0; i < days+1; i++)
+          chart.data = [];
+          try {
+            if (dateRes === undefined)
+              throw "Error while getting chart dates!!";
+            for (var i = 0; i < days+1; i++) 
               chart.data[i] = {
-                date: new Date(btcRes.data.Data[i].time*1000),
-                BTC: btcRes.data.Data[i].close,
-                LTC: ltcRes.data.Data[i].close,
-                BCH: bchRes.data.Data[i].close,
-                ETH: ethRes.data.Data[i].close,
-                ETC: etcRes.data.Data[i].close,
-                ZEC: zecRes.data.Data[i].close,
-                DASH: dashRes.data.Data[i].close,
-                XMR: xmrRes.data.Data[i].close,
-                DCR: dcrRes.data.Data[i].close,
+                date: new Date(dateRes.data.Data[i].time*1000),
+                BTC: ((btcRes.data.Response === "Error") ?  1 : btcRes.data.Data[i].close),
+                LTC: ((ltcRes.data.Response === "Error") ?  1 : ltcRes.data.Data[i].close),
+                BCH: ((bchRes.data.Response === "Error") ?  1 : bchRes.data.Data[i].close),
+                ETH: ((ethRes.data.Response === "Error") ?  1 : ethRes.data.Data[i].close),
+                ETC: ((etcRes.data.Response === "Error") ?  1 : etcRes.data.Data[i].close),
+                ZEC: ((zecRes.data.Response === "Error") ?  1 : zecRes.data.Data[i].close),
+                DASH: ((dashRes.data.Response === "Error") ?  1 : dashRes.data.Data[i].close),
+                XMR: ((xmrRes.data.Response === "Error") ?  1 : xmrRes.data.Data[i].close),
+                DCR: ((dcrRes.data.Response === "Error") ?  1 : dcrRes.data.Data[i].close),
               };
+          }catch(e) {
+            alert(e);
+            chart.data = [];
+          }
           this.chart = chart;
         })
     )
   }
 
   componentCleanup() {
-    if (this.chart) {
+    if (this.chart)
      this.chart.dispose();
-    }else
+    else
       console.log("this.chart is undefined !!")
   }
 
@@ -104,15 +121,13 @@ class Statistics extends Component {
     let validID = id =>  id >= 0 && id <= this.coins.length;
     if (validID(event.target.id)) {
       this.componentCleanup();
-      this.currentCoin = this.temp[event.target.id];
+      this.currentCoin = this.navCoins[event.target.id];
       this.componentDidMount();
     }
   }
   componentWillUnmount() {
-    console.log("umounting chart!!");
     if (this.chart)
      this.chart.dispose();
-
   }
 
 	render() {
