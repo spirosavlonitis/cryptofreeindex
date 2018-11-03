@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import axios from 'axios'
+import axios from 'axios';
 
 am4core.useTheme(am4themes_animated);
 
@@ -17,7 +17,7 @@ class Statistics extends Component {
       {id: "DASH", color: "#2075bc"}, {id: "XMR", color: "#ff6600"}, {id: "DCR", color: "#62D0C9"},
     ];
     this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
-    window.addEventListener('beforeunload', this.componentCleanup);
+    window.addEventListener('beforeunload', this.componentCleanup.bind(this));
     window.addEventListener('mousedown', this.coinChanged.bind(this));
   }
   
@@ -57,7 +57,6 @@ class Statistics extends Component {
 
 
   componentDidMount() {
-
     let days = 365;    
     let urls = []
     for (var i = 0; i < this.coins.length; i++) {
@@ -75,19 +74,20 @@ class Statistics extends Component {
           this.setChart(chart, this.coins);
 
           chart.data = []
-          for (var i = 0; i < days+1; i++)
-            chart.data[i] = {
-              date: new Date(btcRes.data.Data[i].time*1000),
-              BTC: btcRes.data.Data[i].close,
-              LTC: ltcRes.data.Data[i].close,
-              BCH: bchRes.data.Data[i].close,
-              ETH: ethRes.data.Data[i].close,
-              ETC: etcRes.data.Data[i].close,
-              ZEC: zecRes.data.Data[i].close,
-              DASH: dashRes.data.Data[i].close,
-              XMR: xmrRes.data.Data[i].close,
-              DCR: dcrRes.data.Data[i].close,
-            };
+          if (btcRes.data.Data !== undefined)
+            for (var i = 0; i < days+1; i++)
+              chart.data[i] = {
+                date: new Date(btcRes.data.Data[i].time*1000),
+                BTC: btcRes.data.Data[i].close,
+                LTC: ltcRes.data.Data[i].close,
+                BCH: bchRes.data.Data[i].close,
+                ETH: ethRes.data.Data[i].close,
+                ETC: etcRes.data.Data[i].close,
+                ZEC: zecRes.data.Data[i].close,
+                DASH: dashRes.data.Data[i].close,
+                XMR: xmrRes.data.Data[i].close,
+                DCR: dcrRes.data.Data[i].close,
+              };
           this.chart = chart;
         })
     )
@@ -96,9 +96,8 @@ class Statistics extends Component {
   componentCleanup() {
     if (this.chart) {
      this.chart.dispose();
-     console.log(this.chart);
     }else
-      console.log("this.char is undefined !!")
+      console.log("this.chart is undefined !!")
   }
 
   coinChanged(event) {
