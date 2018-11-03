@@ -6,6 +6,15 @@ import DashBoard from './Dashboard'
 import Statistics from './Statistics'
 
 class App extends Component {
+
+	componentDidMount() {
+		/* TODO */
+	}
+
+	componentWillUnmount() {
+		/*  TODO */
+	}
+
   render() {
     return (
         <div className="container" >

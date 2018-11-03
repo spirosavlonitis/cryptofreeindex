@@ -7,6 +7,19 @@ import axios from 'axios'
 am4core.useTheme(am4themes_animated);
 
 class Statistics extends Component {
+
+  constructor(props) {
+    super(props);
+    this.temp = [ "USD", "EUR", "GBP" ]
+    this.coins = [
+      {id: "BTC", color: "#f2a900"}, {id: "LTC", color: "#d3d3d3"}, {id: "BCH", color: "#4cca47"},
+      {id: "ETH", color: "#3385ff"}, {id: "ETC", color: "#669073"}, {id: "ZEC", color: "#f4b728"},
+      {id: "DASH", color: "#2075bc"}, {id: "XMR", color: "#ff6600"}, {id: "DCR", color: "#62D0C9"},
+    ];
+    this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
+    window.addEventListener('beforeunload', this.componentCleanup);
+    window.addEventListener('mousedown', this.coinChanged.bind(this));
+  }
   
   setChart(chart, coins) {
     chart.paddingRight = 20;
@@ -44,19 +57,13 @@ class Statistics extends Component {
 
 
   componentDidMount() {
-    window.addEventListener('beforeunload', this.componentCleanup);
-    let coins = [
-      {id: "BTC", color: "#f2a900"}, {id: "LTC", color: "#d3d3d3"}, {id: "BCH", color: "#4cca47"},
-      {id: "ETH", color: "#3385ff"}, {id: "ETC", color: "#669073"}, {id: "ZEC", color: "#f4b728"},
-      {id: "DASH", color: "#2075bc"}, {id: "XMR", color: "#ff6600"}, {id: "DCR", color: "#62D0C9"},
-    ];
-    let days = 365;
-    let currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
+
+    let days = 365;    
     let urls = []
-    for (var i = 0; i < coins.length; i++) {
-      if (this.currentCoin === coins[i])
+    for (var i = 0; i < this.coins.length; i++) {
+      if (this.currentCoin === this.coins[i])
         continue;
-      urls[i] = "https://min-api.cryptocompare.com/data/histoday?fsym="+coins[i].id+"&tsym="+currentCoin+"&limit="+days+"&aggregate=1&e=CCCAGG";
+      urls[i] = "https://min-api.cryptocompare.com/data/histoday?fsym="+this.coins[i].id+"&tsym="+this.currentCoin+"&limit="+days+"&aggregate=1&e=CCCAGG";
     }; 
     axios.all([
         axios.get(urls[0]), axios.get(urls[1]), axios.get(urls[2]),
@@ -65,7 +72,7 @@ class Statistics extends Component {
       ])
       .then(axios.spread( (btcRes, ltcRes, bchRes, ethRes, etcRes, zecRes, dashRes, xmrRes, dcrRes) => {
           let chart = am4core.create("chartdiv", am4charts.XYChart);
-          this.setChart(chart, coins);
+          this.setChart(chart, this.coins);
 
           chart.data = []
           for (var i = 0; i < days+1; i++)
@@ -87,13 +94,25 @@ class Statistics extends Component {
   }
 
   componentCleanup() {
-    if (this.chart)
-      this.chart.dispose();
+    if (this.chart) {
+     this.chart.dispose();
+     console.log(this.chart);
+    }else
+      console.log("this.char is undefined !!")
   }
 
+  coinChanged(event) {
+    let validID = id =>  id >= 0 && id <= this.coins.length;
+    if (validID(event.target.id)) {
+      this.componentCleanup();
+      this.currentCoin = this.temp[event.target.id];
+      this.componentDidMount();
+    }
+  }
   componentWillUnmount() {
-     if (this.chart)
-      this.chart.dispose();
+    console.log("umounting chart!!");
+    if (this.chart)
+     this.chart.dispose();
 
   }
 

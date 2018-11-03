@@ -31,11 +31,12 @@ class Top extends Component {
 	state = {
 	   	activeKey: 0,
 	}
-	
+	/* Reset dashboard to current coin values */
 	handleSelect(key) {
     this.setState({ activeKey: key }, () => {
     	new Ajax().dashBoardRequest(true);
     });
+    
 	}
 
 	render() {
