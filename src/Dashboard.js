@@ -31,8 +31,11 @@ let curr_coin = "USD";
 
 class DashBoard extends Component {
 	
-	state = {
-		coinData: {}
+	constructor(props) {
+		super(props);
+		this.state = {
+					coinData: {}
+		};
 	}
 
 	componentDidMount() {
@@ -40,7 +43,7 @@ class DashBoard extends Component {
 		axios.get(url).then(res => {
 			 const coinData = res.data
 			 this.setState({ coinData });
-			})
+		});
 	}
 
 	render() {

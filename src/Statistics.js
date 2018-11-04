@@ -86,23 +86,15 @@ class Statistics extends Component {
 
           chart.data = [];
           try {
-            if (dateRes === undefined)
-              throw "Error while getting chart dates!!";
-            for (var i = 0; i < days+1; i++) 
+            for (var i = 0; i < days+1; i++) {
               chart.data[i] = {
                 date: new Date(dateRes.data.Data[i].time*1000),
-                BTC: ((btcRes.data.Response === "Error") ?  1 : btcRes.data.Data[i].close),
-                LTC: ((ltcRes.data.Response === "Error") ?  1 : ltcRes.data.Data[i].close),
-                BCH: ((bchRes.data.Response === "Error") ?  1 : bchRes.data.Data[i].close),
-                ETH: ((ethRes.data.Response === "Error") ?  1 : ethRes.data.Data[i].close),
-                ETC: ((etcRes.data.Response === "Error") ?  1 : etcRes.data.Data[i].close),
-                ZEC: ((zecRes.data.Response === "Error") ?  1 : zecRes.data.Data[i].close),
-                DASH: ((dashRes.data.Response === "Error") ?  1 : dashRes.data.Data[i].close),
-                XMR: ((xmrRes.data.Response === "Error") ?  1 : xmrRes.data.Data[i].close),
-                DCR: ((dcrRes.data.Response === "Error") ?  1 : dcrRes.data.Data[i].close),
               };
+              for (var j = 0; j < results.length; j++) 
+                chart.data[i][this.coins[j].id] = ((results[j].data.Response === "Error") ?  1 : results[j].data.Data[i].close);
+            };
           }catch(e) {
-            alert(e);
+            alert("Error while getting chart dates!!");
             chart.data = [];
           }
           this.chart = chart;
