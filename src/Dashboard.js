@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Image from 'react-bootstrap/lib/Image'
+import CoinInfo from './coin_info'
 import axios from 'axios'
 
 const coins = [
@@ -8,7 +8,6 @@ const coins = [
 		{ id: "EUR", image: "EUR_Logo.svg" },
 		{ id: "GBP", image: "GBP_Logo.png" }, 
 	],
-
 	[
 		{ id: "BTC", image: "BTC_Logo.png" }, 
 		{ id: "LTC", image: "LTC_Logo.png" }, 
@@ -26,9 +25,6 @@ const coins = [
 	],
 ];
 
-const coin_list = coins.map(coin_row => coin_row.map(coin => coin.id)).flat();
-let curr_coin = "USD";
-
 class DashBoard extends Component {
 	
 	constructor(props) {
@@ -36,32 +32,27 @@ class DashBoard extends Component {
 		this.state = {
 					coinData: {}
 		};
+		this.coin_list = coins.map(coin_row => coin_row.map(coin => coin.id)).flat();
+		this.curr_coin = "USD";
 	}
 
 	componentDidMount() {
-		let url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+coin_list.join()+"&tsyms="+curr_coin;
+		let url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+this.coin_list.join()+"&tsyms="+this.curr_coin;
 		axios.get(url).then(res => {
-			 const coinData = res.data
-			 this.setState({ coinData });
+			 this.setState({ coinData: res.data });
 		});
 	}
 
 	render() {
+		const {coinData} = this.state;
 		return (
 			<div>
-				{ coins.map((coin_row, index) =>
-					<div className='row dash_row' key={"row_"+index} >
-						{ coin_row.map(coin =>
-							<div className="col-md-4" key={coin.id+"_dashboard"} >
-							  <div className="usd_field" >
-									 <Image src={"/images/"+coin.image} className="home_price_image" />
-							     <font className="home_price" id={"_"+coin.id} >
-											{ this.state.coinData[coin.id] ? this.state.coinData[coin.id].USD : 0 }
-							     </font>
-							  </div>
-						  </div>
-						)}
-					</div>
+				{ coins.map((coinRow, index) =>
+					<CoinInfo 
+						coinData={coinData}
+						coinRow={coinRow}
+						key={"row_"+index}
+					/>
 				)}
 			</div>
 		);

@@ -6,6 +6,8 @@ import axios from 'axios';
 
 am4core.useTheme(am4themes_animated);
 
+const validID = id =>  id >= 0 && id <= this.coins.length;
+
 class Statistics extends Component {
 
   constructor(props) {
@@ -110,7 +112,6 @@ class Statistics extends Component {
   }
 
   coinChanged(event) {
-    let validID = id =>  id >= 0 && id <= this.coins.length;
     if (validID(event.target.id)) {
       this.componentCleanup();
       this.currentCoin = this.navCoins[event.target.id];
