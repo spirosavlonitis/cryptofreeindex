@@ -6,27 +6,27 @@ import axios from 'axios';
 
 am4core.useTheme(am4themes_animated);
 
-const validID = id =>  id >= 0 && id <= this.coins.length;
+const validID = id => length =>  id >= 0 && id <= length;
 
 class Statistics extends Component {
 
   constructor(props) {
     super(props);
-    this.navCoins = [ 
-        "USD", "EUR", "GBP", "BTC", "LTC", "BCH",  "ETH", "ETC", "ZEC",
-        "DASH", "XMR", "DCR"
-    ]
     this.coins = [
       {id: "BTC", color: "#f2a900"}, {id: "LTC", color: "#d3d3d3"}, {id: "BCH", color: "#4cca47"},
       {id: "ETH", color: "#3385ff"}, {id: "ETC", color: "#669073"}, {id: "ZEC", color: "#f4b728"},
       {id: "DASH", color: "#2075bc"}, {id: "XMR", color: "#ff6600"}, {id: "DCR", color: "#62D0C9"},
     ];
+    this.navCoins = [ "USD", "EUR", "GBP",].concat(this.coins.map(coin => coin.id));
     this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
+    this.state = {
+      chart: undefined,
+    }
     window.addEventListener('beforeunload', this.componentCleanup.bind(this));
     window.addEventListener('mousedown', this.coinChanged.bind(this));
   }
   
-  setChart(chart, coins) {
+  chartSettings(chart, coins) {
     chart.paddingRight = 20;
     let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.grid.template.location = 0;
@@ -60,9 +60,7 @@ class Statistics extends Component {
     valueAxis.renderer.grid.template.strokeOpacity = 0.07;
   }
 
-
-  componentDidMount() {
-    let days = 365;    
+  setChart(days=365) {
     let urls = []
     for (var i = 0; i < this.coins.length; i++)
       if(this.navCoins.slice(0,3).includes(this.currentCoin))
@@ -76,51 +74,58 @@ class Statistics extends Component {
       ])
       .then(axios.spread( (btcRes, ltcRes, bchRes, ethRes, etcRes, zecRes, dashRes, xmrRes, dcrRes) => {
           let chart = am4core.create("chartdiv", am4charts.XYChart);
-          this.setChart(chart, this.coins);
+          this.chartSettings(chart, this.coins);          
           
           let results = [btcRes, ltcRes, bchRes, ethRes, etcRes, zecRes, dashRes, xmrRes, dcrRes];
           let dateRes = undefined;
-          for (let i in results)
-            if (results[i].data.Response !== "Error") {
-              dateRes = results[i];
-              break;
-            }
-
           chart.data = [];
           try {
-            for (var i = 0; i < days+1; i++) {
-              chart.data[i] = {
-                date: new Date(dateRes.data.Data[i].time*1000),
+            for (let i in results)
+              if (results[i].data.Response !== "Error") {
+                dateRes = results[i];
+                break;
+              }
+              for (var i = 0; i < days+1; i++) {
+                chart.data[i] = {
+                  date: new Date(dateRes.data.Data[i].time*1000),
+                };
+                for (var j = 0; j < results.length; j++) 
+                  chart.data[i][this.coins[j].id] = ((results[j].data.Response === "Error") ?  1 : results[j].data.Data[i].close);
               };
-              for (var j = 0; j < results.length; j++) 
-                chart.data[i][this.coins[j].id] = ((results[j].data.Response === "Error") ?  1 : results[j].data.Data[i].close);
-            };
           }catch(e) {
             alert("Error while getting chart dates!!");
             chart.data = [];
           }
-          this.chart = chart;
+          this.setState({ chart });
         })
     )
   }
 
+  componentDidMount() {
+    this.setChart(365);
+  }
+
   componentCleanup() {
-    if (this.chart)
-     this.chart.dispose();
+    let { chart, } = this.state;
+    if (chart)
+     chart.dispose();
     else
-      console.log("this.chart is undefined !!")
+      console.log("this.state.chart is undefined !!");
   }
 
   coinChanged(event) {
-    if (validID(event.target.id)) {
+    if (validID(event.target.id)(this.coins.length)) {
       this.componentCleanup();
       this.currentCoin = this.navCoins[event.target.id];
-      this.componentDidMount();
+      this.setChart(365);
     }
   }
   componentWillUnmount() {
-    if (this.chart)
-     this.chart.dispose();
+    let { chart, } = this.state;
+    if (chart)
+     chart.dispose();
+    else
+      console.log("this.state.chart is undefined !!");
   }
 
 	render() {

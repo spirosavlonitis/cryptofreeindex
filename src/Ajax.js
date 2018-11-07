@@ -42,7 +42,7 @@ class Ajax {
 				let newValue = res.data['RAW'][this.currentCoin][coin].PRICE.toFixed(6);
 				this.setValue(reset, fontElement, oldValue, newValue);
 			}
-		})
+		});
 	}
 
 	dashBoardRequest(reset = false) {

@@ -26,11 +26,11 @@ class Top extends Component {
 	constructor(props) {
     super(props);
     this.handleSelect = this.handleSelect.bind(this);
+    this.state 	= {
+		   	activeKey: 0,
+		};
   }
 
-	state = {
-	   	activeKey: 0,
-	}
 	/* Reset dashboard to current coin values */
 	handleSelect(key) {
     this.setState({ activeKey: key }, () => {
@@ -40,8 +40,9 @@ class Top extends Component {
 	}
 
 	render() {
+		const { activeKey, } = this.state;
 		return (
-			<Navbar inverse key="Navbar1" >
+			<Navbar inverse >
 			  <Navbar.Header>
 			    <Navbar.Brand>
 			      <a href="#home">CryptoFreeIndex</a>
@@ -49,7 +50,7 @@ class Top extends Component {
 			    <Navbar.Toggle />
 			  </Navbar.Header>
 			  <Navbar.Collapse>
-				  <Nav activeKey={this.state.activeKey } onSelect={this.handleSelect} >
+				  <Nav activeKey={activeKey } onSelect={this.handleSelect} >
 					{ coins.map((coin, index) =>
 							<NavItem eventKey={index} href="#" id={index} key={"NavItem"+coin.id} >
 							  <Image src= {"images/"+coin.image} className="NavImg" />{coin.id}
@@ -60,8 +61,6 @@ class Top extends Component {
 			</Navbar>
 		)
 	}
-
 }
-
 
 export default Top

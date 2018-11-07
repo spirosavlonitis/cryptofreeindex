@@ -5,16 +5,7 @@ import Tab from 'react-bootstrap/lib/Tab'
 import DashBoard from './Dashboard'
 import Statistics from './Statistics'
 
-class App extends Component {
-
-	componentDidMount() {
-		/* TODO */
-	}
-
-	componentWillUnmount() {
-		/*  TODO */
-	}
-
+export default class App extends Component {
   render() {
     return (
         <div className="container" >
@@ -34,5 +25,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;
