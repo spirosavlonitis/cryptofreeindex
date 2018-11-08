@@ -30,7 +30,7 @@ class DashBoard extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-					coinData: {}
+					coinData: null,
 		};
 		this.coin_list = coins.map(coin_row => coin_row.map(coin => coin.id)).flat();
 		this.curr_coin = "USD";
@@ -45,6 +45,8 @@ class DashBoard extends Component {
 
 	render() {
 		const {coinData} = this.state;
+		if (coinData === null)
+			return null;
 		return (
 			<div>
 				{ coins.map((coinRow, index) =>
