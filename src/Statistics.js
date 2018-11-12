@@ -21,7 +21,7 @@ class Statistics extends Component {
     this.state = {
       chart: undefined,
       loading: true,
-    }
+    };
     window.addEventListener('beforeunload', this.componentCleanup.bind(this));
     window.addEventListener('mousedown', this.coinChanged.bind(this));
   }
@@ -93,10 +93,10 @@ class Statistics extends Component {
                   chart.data[i][this.coins[j].id] = ((results[j].data.Response === "Error") ?  1 : results[j].data.Data[i].close);
               };
           }catch(e) {
-            alert("Error while getting chart dates!!");
+            alert("Error while getting chart data!!");
             chart.data = [];
           }
-          this.setState({ chart, loading: false });
+          this.setState({ chart, loading: null });
         })
     )
   }
@@ -130,11 +130,12 @@ class Statistics extends Component {
       console.log("this.state.chart is undefined !!");
   }
 
+
 	render() {
+    const {loading,} = this.state;
 		return(
       <div>
-        {this.state.loading && <TopBarProgress /> }
-		    <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+        { loading && <TopBarProgress /> }
       </div>
 		);
 	}
