@@ -3,10 +3,9 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import axios from 'axios';
+import TopBarProgress from "react-topbar-progress-indicator"
 
 am4core.useTheme(am4themes_animated);
-
-const validID = id => length =>  id >= 0 && id <= length;
 
 class Statistics extends Component {
 
@@ -21,6 +20,7 @@ class Statistics extends Component {
     this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
     this.state = {
       chart: undefined,
+      loading: true,
     }
     window.addEventListener('beforeunload', this.componentCleanup.bind(this));
     window.addEventListener('mousedown', this.coinChanged.bind(this));
@@ -96,7 +96,7 @@ class Statistics extends Component {
             alert("Error while getting chart dates!!");
             chart.data = [];
           }
-          this.setState({ chart });
+          this.setState({ chart, loading: false });
         })
     )
   }
@@ -114,7 +114,9 @@ class Statistics extends Component {
   }
 
   coinChanged(event) {
+    const validID = id => length =>  id >= 0 && id <= length;
     if (validID(event.target.id)(this.coins.length)) {
+      this.setState({loading: true});
       this.componentCleanup();
       this.currentCoin = this.navCoins[event.target.id];
       this.setChart(365);
@@ -130,7 +132,10 @@ class Statistics extends Component {
 
 	render() {
 		return(
-		  <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+      <div>
+        {this.state.loading && <TopBarProgress /> }
+		    <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+      </div>
 		);
 	}
 }
