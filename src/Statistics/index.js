@@ -3,9 +3,18 @@ import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import axios from 'axios';
-import TopBarProgress from "react-topbar-progress-indicator"
+import TopBarProgress from "react-topbar-progress-indicator";
 
 am4core.useTheme(am4themes_animated);
+
+TopBarProgress.config({
+  barColors: {
+    "0": "#f00",
+    "1.0": "#ff5050",
+  },
+  shadowBlur: 5,
+});
+
 
 class Statistics extends Component {
 
@@ -15,9 +24,11 @@ class Statistics extends Component {
       BTC: {color: "#f2a900"}, LTC: {color: "#d3d3d3"}, BCH: {color: "#4cca47"},
       ETH: {color: "#3385ff"}, ETC: {color: "#669073"}, ZEC: {color: "#f4b728"},
       DASH:{ color: "#2075bc"}, XMR: {color: "#ff6600"}, DCR: {color: "#62D0C9"},
+      USD: {color: "#339933"}
     };
+    
     this.navCoins = [ "USD", "EUR", "GBP",].concat((Object.keys(this.coins)));
-    console.log(this.navCoins)
+
     this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
     this.state = {
       chart: undefined,
@@ -60,7 +71,6 @@ class Statistics extends Component {
 
   setChart(coin, days=365) {
     let url;
-    console.log(this.coins[coin])
     if(this.navCoins.slice(0,3).includes(this.currentCoin))
       url = "https://min-api.cryptocompare.com/data/histoday?fsym="+coin+"&tsym="+this.currentCoin+"&limit="+days+"&aggregate=1&e=CCCAGG";
     else
@@ -86,7 +96,11 @@ class Statistics extends Component {
   }
 
   componentDidMount() {
-    this.setChart('BTC');
+    const {navCoins, currentCoin} = this;
+    this.setChart(navCoins.slice(0,3).includes(currentCoin)
+      ? 'BTC'
+      : 'USD'
+    );
   }
 
   componentCleanup() {
@@ -98,12 +112,11 @@ class Statistics extends Component {
   }
 
   coinChanged(event) {
-    const validID = id => length =>  id >= 0 && id <= length;
-    if (validID(event.target.id)(this.coins.length)) {
-      this.setState({isLoading: true});
+    const validID = (id, length) =>  id >= 0 && id <= length;
+    if (validID(event.target.id, this.navCoins.length)) {
       this.componentCleanup();
       this.currentCoin = this.navCoins[event.target.id];
-      this.setChart(365);
+      this.setChart((event.target.id < 3) ? 'BTC' : 'USD' );
     }
   }
   componentWillUnmount() {
