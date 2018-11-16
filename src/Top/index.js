@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import './index.css'
+import Ajax from '../Ajax'
 import Navbar from 'react-bootstrap/lib/Navbar'
 import Nav from 'react-bootstrap/lib/Nav'
 import NavItem from 'react-bootstrap/lib/NavItem'
 import Image from 'react-bootstrap/lib/Image'
-import Ajax from './Ajax'
 
 const coins = [
 		{ id: "USD", image: "USD_Logo.png" }, 

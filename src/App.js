@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Tabs from 'react-bootstrap/lib/Tabs'
 import Tab from 'react-bootstrap/lib/Tab'
-import DashBoard from './Dashboard'
+import DashBoard from './DashBoard'
 import Statistics from './Statistics'
 
 export default class App extends Component {
@@ -15,7 +15,7 @@ export default class App extends Component {
 							<Tab eventKey={1} title="Dashboard">
 								<DashBoard />
 							</Tab>
-							<Tab eventKey={2} title="Statistics">
+							<Tab eventKey={2} title="Statistics">								
 								<div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
 								<Statistics />
 							</Tab>

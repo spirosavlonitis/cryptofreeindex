@@ -20,7 +20,7 @@ class Statistics extends Component {
     this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
     this.state = {
       chart: undefined,
-      loading: true,
+      isLoading: false,
     };
     window.addEventListener('beforeunload', this.componentCleanup.bind(this));
     window.addEventListener('mousedown', this.coinChanged.bind(this));
@@ -67,6 +67,7 @@ class Statistics extends Component {
         urls[i] = "https://min-api.cryptocompare.com/data/histoday?fsym="+this.coins[i].id+"&tsym="+this.currentCoin+"&limit="+days+"&aggregate=1&e=CCCAGG";
       else
         urls[i] = "https://min-api.cryptocompare.com/data/histoday?fsym="+this.currentCoin+"&tsym="+this.coins[i].id+"&limit="+days+"&aggregate=1&e=CCCAGG";
+    this.setState({isLoading: true});
     axios.all([
         axios.get(urls[0]), axios.get(urls[1]), axios.get(urls[2]),
         axios.get(urls[3]), axios.get(urls[4]), axios.get(urls[5]),
@@ -96,7 +97,7 @@ class Statistics extends Component {
             alert("Error while getting chart data!!");
             chart.data = [];
           }
-          this.setState({ chart, loading: null });
+          this.setState({ chart, isLoading: null });
         })
     )
   }
@@ -116,7 +117,7 @@ class Statistics extends Component {
   coinChanged(event) {
     const validID = id => length =>  id >= 0 && id <= length;
     if (validID(event.target.id)(this.coins.length)) {
-      this.setState({loading: true});
+      this.setState({isLoading: true});
       this.componentCleanup();
       this.currentCoin = this.navCoins[event.target.id];
       this.setChart(365);
@@ -130,12 +131,11 @@ class Statistics extends Component {
       console.log("this.state.chart is undefined !!");
   }
 
-
 	render() {
-    const {loading,} = this.state;
+    const {isLoading,} = this.state;
 		return(
       <div>
-        { loading && <TopBarProgress /> }
+        { isLoading && <TopBarProgress /> }
       </div>
 		);
 	}

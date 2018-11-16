@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import CoinInfo from './CoinInfo'
+import CoinInfo from '../CoinInfo'
 import axios from 'axios'
 
 const coins = [
