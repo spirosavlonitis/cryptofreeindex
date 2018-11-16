@@ -44,7 +44,7 @@ export default class App extends Component {
 		   	activeKey: 0,
 		   	chart: undefined,
 		   	isLoading: false,
-				navCoins: [ "USD", "EUR", "GBP",].concat(this.coins.map(coin => coin.id)),
+				navCoins: this.coins.map(coin => coin.id),
 		};
     
     this.handleSelect = this.handleSelect.bind(this);
@@ -111,6 +111,7 @@ export default class App extends Component {
   getChartData(coin, key ,days=365) {
   	const {navCoins} = this.state;
 	  let url;
+
 	  if(key < 3)
 	    url = "https://min-api.cryptocompare.com/data/histoday?fsym="+coin+"&tsym="+navCoins[key]+"&limit="+days+"&aggregate=1&e=CCCAGG";
 	  else
@@ -124,6 +125,7 @@ export default class App extends Component {
 
 	/* Reset dashboard to current coin values */
 	handleSelect(key) {
+		this.componentCleanup();
     this.setState({ activeKey: key });
     this.getChartData(key < 3 ? 'BTC' : 'USD', key);
 	}
@@ -133,10 +135,15 @@ export default class App extends Component {
     this.getChartData(activeKey < 3 ? 'BTC' : 'USD', activeKey);
   }
 
+  componentWillUnmount(){
+  	this.componentCleanup();
+  }
+
   render() {
-  	const {activeKey,} = this.state;
+  	const {activeKey, isLoading} = this.state;
     return (
     	<div>
+    		{isLoading && <TopBarProgress />}
 				<Navbar inverse >
 				  <Navbar.Header>
 				    <Navbar.Brand>
