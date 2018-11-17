@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import CoinInfo from '../CoinInfo'
-import axios from 'axios'
 
 const coins = [
 	[
@@ -27,29 +26,11 @@ const coins = [
 
 class DashBoard extends Component {
 	
-	constructor(props) {
-		super(props);
-		this.state = {
-					coinData: null,
-		};
-		this.coin_list = coins.map(coin_row => coin_row.map(coin => coin.id)).flat();
-		this.curr_coin = "USD";
-	}
-
-	componentDidMount() {
-		let url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+this.coin_list.join()+"&tsyms="+this.curr_coin;
-		axios.get(url).then(res => {
-			 this.setState({ coinData: res.data });
-		});
-	}
-
 	render() {
-		const {coinData} = this.state;
-		if (coinData === null)
-			return null;
+		const {coinData} = this.props;
 		return (
 			<div>
-				{ coins.map((coinRow, index) =>
+				{coinData && coins.map((coinRow, index) =>
 					<CoinInfo 
 						coinData={coinData}
 						coinRow={coinRow}

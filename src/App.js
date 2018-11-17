@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
-import Navbar from 'react-bootstrap/lib/Navbar';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import Image from 'react-bootstrap/lib/Image';
+import TopBarProgress from "react-topbar-progress-indicator";
 import Tabs from 'react-bootstrap/lib/Tabs';
 import Tab from 'react-bootstrap/lib/Tab';
-import DashBoard from './DashBoard'
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
+import Image from 'react-bootstrap/lib/Image';
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import axios from 'axios';
-import TopBarProgress from "react-topbar-progress-indicator";
+import Bar from './Bar'
 
 am4core.useTheme(am4themes_animated);
 
@@ -43,6 +40,7 @@ export default class App extends Component {
     this.state 	= {
 		   	activeKey: 0,
 		   	chart: undefined,
+		   	coinData: null,
 		   	isLoading: false,
 				navCoins: this.coins.map(coin => coin.id),
 		};
@@ -116,22 +114,32 @@ export default class App extends Component {
 	    url = "https://min-api.cryptocompare.com/data/histoday?fsym="+coin+"&tsym="+navCoins[key]+"&limit="+days+"&aggregate=1&e=CCCAGG";
 	  else
 	    url = "https://min-api.cryptocompare.com/data/histoday?fsym="+navCoins[key]+"&tsym="+coin+"&limit="+days+"&aggregate=1&e=CCCAGG";
-	  this.setState({isLoading: true});
+	  this.setState({isLoading: true, activeKey: key});
 	  axios.get(url)
 	    .then(res => {
 	    		this.setChart(coin, res, days);
 	     })
 		}
 
+	getCoinData(key) {
+		const {navCoins} = this.state;
+		let url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+
+							navCoins.join()+"&tsyms="+navCoins[key];
+		axios.get(url).then(res => {
+			 this.setState({ coinData: res.data });
+		});
+	}
+
 	/* Reset dashboard to current coin values */
 	handleSelect(key) {
 		this.componentCleanup();
-    this.setState({ activeKey: key });
+    this.getCoinData(key);
     this.getChartData(key < 3 ? 'BTC' : 'USD', key);
 	}
 
   componentDidMount() {
     const {activeKey} = this.state;
+    this.getCoinData(0);
     this.getChartData(activeKey < 3 ? 'BTC' : 'USD', activeKey);
   }
 
@@ -140,33 +148,29 @@ export default class App extends Component {
   }
 
   render() {
-  	const {activeKey, isLoading} = this.state;
+  	const {activeKey, isLoading, coinData, navCoins} = this.state;
     return (
     	<div>
     		{isLoading && <TopBarProgress />}
-				<Navbar inverse >
-				  <Navbar.Header>
-				    <Navbar.Brand>
-				      <a href="#home">CryptoFreeIndex</a>
-				    </Navbar.Brand>
-				    <Navbar.Toggle />
-				  </Navbar.Header>
-				  <Navbar.Collapse>
-					  <Nav activeKey={activeKey } onSelect={this.handleSelect} >
-						{ this.coins.map((coin, index) =>
-								<NavItem eventKey={index} href="#" id={index} key={"NavItem"+coin.id} >
-								  <Image src= {"images/"+coin.image} className="NavImg" />{coin.id}
-								</NavItem>
-							)}
-						</Nav>
-				 </Navbar.Collapse>
-				</Navbar>
+    		<Bar  {...{activeKey, coins:this.coins, onSelect: this.handleSelect }} />
         <div className="container" >
         	<div className="row" >
 					<div className="col-md-12" >
 						<Tabs defaultActiveKey={1} id="uncontrolled-tab-example" >
 							<Tab eventKey={1} title="Dashboard">
-								<DashBoard />
+									<div className='row dash_row' >
+										{coinData 
+											&& this.coins.map(coin =>
+											<div className="col-md-4" key={coin.id+"_dashboard"} >
+											  <div className="usd_field" >
+													 <Image src={"/images/"+coin.image} className="home_price_image" />
+											     <font className="home_price" id={"_"+coin.id} >
+															{   coinData[coin.id][navCoins[activeKey]] }
+											     </font>
+											  </div>
+										  </div>
+										)}
+									</div>
 							</Tab>
 							<Tab eventKey={2} title="Statistics">								
 								<div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
