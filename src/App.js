@@ -5,10 +5,10 @@ import Tabs from 'react-bootstrap/lib/Tabs';
 import Tab from 'react-bootstrap/lib/Tab';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
-import Image from 'react-bootstrap/lib/Image';
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import axios from 'axios';
 import Bar from './Bar'
+import DashBoard from './DashBoard'
 
 am4core.useTheme(am4themes_animated);
 
@@ -118,15 +118,16 @@ export default class App extends Component {
 	  axios.get(url)
 	    .then(res => {
 	    		this.setChart(coin, res, days);
-	     })
+	     });
 		}
 
 	getCoinData(key) {
 		const {navCoins} = this.state;
 		let url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+
 							navCoins.join()+"&tsyms="+navCoins[key];
+		this.setState({isLoading: true})
 		axios.get(url).then(res => {
-			 this.setState({ coinData: res.data });
+			 this.setState({ coinData: res.data, isLoading: false });
 		});
 	}
 
@@ -144,11 +145,20 @@ export default class App extends Component {
   }
 
   componentWillUnmount(){
-  	this.componentCleanup();
+  	let { chart, } = this.state;
+    if (chart)
+     chart.dispose();
   }
 
   render() {
   	const {activeKey, isLoading, coinData, navCoins} = this.state;
+  	const coinCols = [];
+  	/* Create 4 item columns  */
+  	for (let i = 0; i < this.coins.length/4; i++) {
+			coinCols[i] = [];
+			for (let j = i; j < i+10; j+= 3)
+				coinCols[i][j] = this.coins[j];
+  	} 
     return (
     	<div>
     		{isLoading && <TopBarProgress />}
@@ -158,19 +168,7 @@ export default class App extends Component {
 					<div className="col-md-12" >
 						<Tabs defaultActiveKey={1} id="uncontrolled-tab-example" >
 							<Tab eventKey={1} title="Dashboard">
-									<div className='row dash_row' >
-										{coinData 
-											&& this.coins.map(coin =>
-											<div className="col-md-4" key={coin.id+"_dashboard"} >
-											  <div className="usd_field" >
-													 <Image src={"/images/"+coin.image} className="home_price_image" />
-											     <font className="home_price" id={"_"+coin.id} >
-															{   coinData[coin.id][navCoins[activeKey]] }
-											     </font>
-											  </div>
-										  </div>
-										)}
-									</div>
+								<DashBoard  {...{coinData, coinCols, navCoins, activeKey}} />
 							</Tab>
 							<Tab eventKey={2} title="Statistics">								
 								<div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>

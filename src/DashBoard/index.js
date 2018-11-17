@@ -1,46 +1,24 @@
-import React, { Component } from 'react'
-import CoinInfo from '../CoinInfo'
+import React from 'react'
+import Image from 'react-bootstrap/lib/Image'
 
-const coins = [
-	[
-		{ id: "USD", image: "USD_Logo.png" }, 
-		{ id: "EUR", image: "EUR_Logo.svg" },
-		{ id: "GBP", image: "GBP_Logo.png" }, 
-	],
-	[
-		{ id: "BTC", image: "BTC_Logo.png" }, 
-		{ id: "LTC", image: "LTC_Logo.png" }, 
-		{ id: "BCH", image: "BCH_Logo.png" },
-	],
-	[
-		{ id: "ETH", image: "ETH_Logo.png" }, 
-		{ id: "ETC", image: "ETC_Logo.svg" }, 
-		{ id: "ZEC", image: "ZEC_Logo.svg" },		
-	],
-	[
-		{ id: "DASH", image: "DASH_Logo.png" }, 	
-		{ id: "XMR", image: "XMR_Logo.png" }, 	
-		{ id: "DCR", image: "DCR_Logo.png" }, 	
-	],
-];
-
-class DashBoard extends Component {
-	
-	render() {
-		const {coinData} = this.props;
-		return (
-			<div>
-				{coinData && coins.map((coinRow, index) =>
-					<CoinInfo 
-						coinData={coinData}
-						coinRow={coinRow}
-						key={"row_"+index}
-					/>
-				)}
-			</div>
-		);
-	}
+const CoinInfo = ({ coinData, coinCols, navCoins, activeKey}) => {
+	return(
+		<div className='row dash_row' >
+			{coinData 
+				&& coinCols.map((coinCol, index) =>
+				<div className="col-md-4" key={index+"_dashboard"} >
+					{coinCol.map( coin => 
+						  <div className="usd_field" key={'col'+coin.id} >
+						  	 <br/>
+								 <Image src={"/images/"+coin.image} className="home_price_image" />
+						     <font className="home_price" id={"_"+coin.id} >
+										{ coinData[coin.id][navCoins[activeKey]] }
+						     </font>
+						  </div>
+					)}
+			  </div>
+			)}
+		</div>
+	)
 }
-
-
-export default DashBoard
+export default CoinInfo;
