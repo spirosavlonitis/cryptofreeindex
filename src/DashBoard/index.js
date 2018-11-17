@@ -1,11 +1,11 @@
 import React from 'react'
 import Image from 'react-bootstrap/lib/Image'
 
-const CoinInfo = ({ coinData, coinCols, navCoins, activeKey}) => {
+
+const CoinInfo = ({coinData, coinCols, navCoins, activeKey}) => {
 	return(
 		<div className='row dash_row' >
-			{coinData 
-				&& coinCols.map((coinCol, index) =>
+			{coinCols.map((coinCol, index) =>
 				<div className="col-md-4" key={index+"_dashboard"} >
 					{coinCol.map( coin => 
 						  <div className="usd_field" key={'col'+coin.id} >

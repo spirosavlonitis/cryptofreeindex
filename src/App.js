@@ -9,6 +9,7 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 import axios from 'axios';
 import Bar from './Bar'
 import DashBoard from './DashBoard'
+import Loading from './Loading'
 
 am4core.useTheme(am4themes_animated);
 
@@ -40,7 +41,7 @@ export default class App extends Component {
     this.state 	= {
 		   	activeKey: 0,
 		   	chart: undefined,
-		   	coinData: null,
+		   	coinData: false,
 		   	isLoading: false,
 				navCoins: this.coins.map(coin => coin.id),
 		};
@@ -125,7 +126,7 @@ export default class App extends Component {
 		const {navCoins} = this.state;
 		let url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+
 							navCoins.join()+"&tsyms="+navCoins[key];
-		this.setState({isLoading: true})
+		this.setState({isLoading: true, coinData: false})
 		axios.get(url).then(res => {
 			 this.setState({ coinData: res.data, isLoading: false });
 		});
@@ -168,7 +169,7 @@ export default class App extends Component {
 					<div className="col-md-12" >
 						<Tabs defaultActiveKey={1} id="uncontrolled-tab-example" >
 							<Tab eventKey={1} title="Dashboard">
-								<DashBoard  {...{coinData, coinCols, navCoins, activeKey}} />
+								{ <DashBoardWithCoinData  {...{coinData, coinCols, navCoins, activeKey}} />}
 							</Tab>
 							<Tab eventKey={2} title="Statistics">								
 								<div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
@@ -181,3 +182,8 @@ export default class App extends Component {
     );
   }
 }
+
+const withCoinData = Component => ({coinData, coinCols, navCoins, activeKey}) =>
+	coinData ? 	 <Component {...{coinData, coinCols, navCoins, activeKey}} /> : <Loading />
+
+const DashBoardWithCoinData = withCoinData(DashBoard);
