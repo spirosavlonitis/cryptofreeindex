@@ -169,10 +169,10 @@ export default class App extends Component {
 					<div className="col-md-12" >
 						<Tabs defaultActiveKey={1} id="uncontrolled-tab-example" >
 							<Tab eventKey={1} title="Dashboard">
-								{ <DashBoardWithCoinData  {...{coinData, coinCols, navCoins, activeKey}} />}
+								<DashBoardWithCoinData {...{coinData, coinCols, navCoins, activeKey}} />
 							</Tab>
 							<Tab eventKey={2} title="Statistics">								
-								<div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+                <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
 							</Tab>
 						</Tabs>
 					</div>
