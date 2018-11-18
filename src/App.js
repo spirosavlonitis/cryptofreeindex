@@ -10,6 +10,7 @@ import axios from 'axios';
 import Bar from './Bar'
 import DashBoard from './DashBoard'
 import Loading from './Loading'
+import Chart from './Chart'
 
 am4core.useTheme(am4themes_animated);
 
@@ -42,6 +43,7 @@ export default class App extends Component {
 		   	activeKey: 0,
 		   	chart: undefined,
 		   	coinData: false,
+        chartCoin: null,
 		   	isLoading: false,
 				navCoins: this.coins.map(coin => coin.id),
 		};
@@ -115,7 +117,7 @@ export default class App extends Component {
 	    url = "https://min-api.cryptocompare.com/data/histoday?fsym="+coin+"&tsym="+navCoins[key]+"&limit="+days+"&aggregate=1&e=CCCAGG";
 	  else
 	    url = "https://min-api.cryptocompare.com/data/histoday?fsym="+navCoins[key]+"&tsym="+coin+"&limit="+days+"&aggregate=1&e=CCCAGG";
-	  this.setState({isLoading: true, activeKey: key});
+	  this.setState({isLoading: true, activeKey: key, chartCoin: coin});
 	  axios.get(url)
 	    .then(res => {
 	    		this.setChart(coin, res, days);
@@ -152,7 +154,7 @@ export default class App extends Component {
   }
 
   render() {
-  	const {activeKey, isLoading, coinData, navCoins} = this.state;
+  	const {activeKey, isLoading, coinData, navCoins, chartCoin} = this.state;
   	const coinCols = [];
   	/* Create 4 item columns  */
   	for (let i = 0; i < this.coins.length/4; i++) {
@@ -166,16 +168,16 @@ export default class App extends Component {
     		<Bar  {...{activeKey, coins:this.coins, onSelect: this.handleSelect }} />
         <div className="container" >
         	<div className="row" >
-					<div className="col-md-12" >
+					 <div className="col-md-12" >
 						<Tabs defaultActiveKey={1} id="uncontrolled-tab-example" >
 							<Tab eventKey={1} title="Dashboard">
 								<DashBoardWithCoinData {...{coinData, coinCols, navCoins, activeKey}} />
 							</Tab>
 							<Tab eventKey={2} title="Statistics">								
-                <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>
+                <Chart {...{chartCoin, navCoins}} />
 							</Tab>
 						</Tabs>
-					</div>
+					 </div>
         	</div>
         </div>      
 			</div>

@@ -1,0 +1,85 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Chart snapshot 1`] = `
+<div>
+  <div
+    id="chartdiv"
+    style={
+      Object {
+        "height": "500px",
+        "width": "100%",
+      }
+    }
+  />
+  <form
+    className=""
+  >
+    <select
+      className="form-control"
+      placeholder="select"
+      value="BTC"
+    >
+      <option
+        value="USD"
+      >
+        USD
+      </option>
+      <option
+        value="EUR"
+      >
+        EUR
+      </option>
+      <option
+        value="GBP"
+      >
+        GBP
+      </option>
+      <option
+        value="BTC"
+      >
+        BTC
+      </option>
+      <option
+        value="LTC"
+      >
+        LTC
+      </option>
+      <option
+        value="BCH"
+      >
+        BCH
+      </option>
+      <option
+        value="ETH"
+      >
+        ETH
+      </option>
+      <option
+        value="ETC"
+      >
+        ETC
+      </option>
+      <option
+        value="ZEC"
+      >
+        ZEC
+      </option>
+      <option
+        value="DASH"
+      >
+        DASH
+      </option>
+      <option
+        value="XMR"
+      >
+        XMR
+      </option>
+      <option
+        value="DCR"
+      >
+        DCR
+      </option>
+    </select>
+  </form>
+</div>
+`;
