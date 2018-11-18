@@ -22,6 +22,8 @@ TopBarProgress.config({
   shadowBlur: 5,
 });
 
+const PATH_BASE = "https://min-api.cryptocompare.com/data"
+
 export default class App extends Component {
 	constructor(props) {
     super(props);
@@ -63,12 +65,23 @@ export default class App extends Component {
   }
 
   getCoinData(key) {
-    const {navCoins} = this.state;
-    let url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+
-              navCoins.join()+"&tsyms="+navCoins[key];
+    const {navCoins, } = this.state;
+    let url;
+    if (key < 3)
+      url = PATH_BASE+"/pricemulti?fsyms="+navCoins.join()+"&tsyms="+navCoins[key];
+    else              
+      url = PATH_BASE+"/pricemulti?fsyms="+navCoins[key]+"&tsyms="+navCoins.join();
+
     this.setState({isLoading: true, coinData: false})
     axios.get(url).then(res => {
-       this.setState({ coinData: res.data, isLoading: false });
+      const obj = { [navCoins[key]]: {}  }
+      if (Object.keys(res.data).length > 1) /* set object to universal format */
+       for (let i in navCoins)
+         obj[navCoins[key]][navCoins[i]] = res.data[navCoins[i]][navCoins[key]];
+      else
+        obj[navCoins[key]] = res.data[[navCoins[key]]];
+
+      this.setState({ coinData: obj, isLoading: false });
     });
   }
 
@@ -180,8 +193,8 @@ export default class App extends Component {
   	/* Create 4 item columns */
   	for (let i = 0; i < this.coins.length/4; i++) {
 			coinCols[i] = [];
-			for (let j = i; j < i+10; j+= 3)
-				coinCols[i][j] = this.coins[j];
+			for (let j = i, k = 0; j < i+10; j+= 3, k++)
+				coinCols[i][k] = this.coins[j];
   	} 
     return (
     	<div>

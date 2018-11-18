@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'react-bootstrap/lib/Image'
 
 
-const CoinInfo = ({coinData, coinCols, navCoins, activeKey}) => {
+const DashBoard = ({coinData, coinCols, navCoins, activeKey}) => {
 	return(
 		<div>
 			{coinCols.map((coinCol, index) =>
@@ -12,7 +12,7 @@ const CoinInfo = ({coinData, coinCols, navCoins, activeKey}) => {
 						  	 <br/>
 								 <Image src={"/images/"+coin.image} className="home_price_image" />
 						     <font className="home_price" id={"_"+coin.id} >
-										{ coinData[coin.id][navCoins[activeKey]] }
+										{ coinData[navCoins[activeKey]][coin.id] }
 						     </font>
 						  </div>
 					)}
@@ -21,4 +21,4 @@ const CoinInfo = ({coinData, coinCols, navCoins, activeKey}) => {
 		</div>
 	)
 }
-export default CoinInfo;
+export default DashBoard;
