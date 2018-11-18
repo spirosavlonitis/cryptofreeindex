@@ -49,6 +49,7 @@ export default class App extends Component {
 		};
     
     this.handleSelect = this.handleSelect.bind(this);
+    this.changeChartCoin = this.changeChartCoin.bind(this);
   }
 
   componentCleanup() {
@@ -134,8 +135,16 @@ export default class App extends Component {
 		});
 	}
 
-	/* Reset dashboard to current coin values */
-	handleSelect(key) {
+  /* Change coin shown on chart */
+	changeChartCoin(event) {
+    const { activeKey, } = this.state;
+    this.setState({chartCoin: event.target.value});
+    this.componentCleanup();
+    this.getChartData(event.target.value, activeKey);
+  }
+
+  /* Reset dashboard and chart to current coin */
+  handleSelect(key) {
 		this.componentCleanup();
     this.getCoinData(key);
     this.getChartData(key < 3 ? 'BTC' : 'USD', key);
@@ -156,7 +165,7 @@ export default class App extends Component {
   render() {
   	const {activeKey, isLoading, coinData, navCoins, chartCoin} = this.state;
   	const coinCols = [];
-  	/* Create 4 item columns  */
+  	/* Create 4 item columns */
   	for (let i = 0; i < this.coins.length/4; i++) {
 			coinCols[i] = [];
 			for (let j = i; j < i+10; j+= 3)
@@ -174,7 +183,7 @@ export default class App extends Component {
 								<DashBoardWithCoinData {...{coinData, coinCols, navCoins, activeKey}} />
 							</Tab>
 							<Tab eventKey={2} title="Statistics">								
-                <Chart {...{chartCoin, navCoins}} />
+                <Chart {...{chartCoin, navCoins, onChange: this.changeChartCoin}} />
 							</Tab>
 						</Tabs>
 					 </div>
