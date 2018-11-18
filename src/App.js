@@ -41,15 +41,17 @@ export default class App extends Component {
 		];
     this.state 	= {
 		   	activeKey: 0,
-		   	chart: undefined,
-		   	coinData: false,
+        coinData: false,
+        chart: undefined,
         chartCoin: null,
+        chartDays: 365,
 		   	isLoading: false,
 				navCoins: this.coins.map(coin => coin.id),
 		};
     
     this.handleSelect = this.handleSelect.bind(this);
     this.changeChartCoin = this.changeChartCoin.bind(this);
+    this.changeChartDays = this.changeChartDays.bind(this);
   }
 
   componentCleanup() {
@@ -58,6 +60,16 @@ export default class App extends Component {
      chart.dispose();
     else
       console.log("this.state.chart is undefined !!");
+  }
+
+  getCoinData(key) {
+    const {navCoins} = this.state;
+    let url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+
+              navCoins.join()+"&tsyms="+navCoins[key];
+    this.setState({isLoading: true, coinData: false})
+    axios.get(url).then(res => {
+       this.setState({ coinData: res.data, isLoading: false });
+    });
   }
 
   chartSettings(chart, coin) {
@@ -111,13 +123,13 @@ export default class App extends Component {
   }
 
   getChartData(coin, key ,days=365) {
-  	const {navCoins} = this.state;
+  	const {navCoins,} = this.state;
 	  let url;
-
 	  if(key < 3)
 	    url = "https://min-api.cryptocompare.com/data/histoday?fsym="+coin+"&tsym="+navCoins[key]+"&limit="+days+"&aggregate=1&e=CCCAGG";
 	  else
 	    url = "https://min-api.cryptocompare.com/data/histoday?fsym="+navCoins[key]+"&tsym="+coin+"&limit="+days+"&aggregate=1&e=CCCAGG";
+
 	  this.setState({isLoading: true, activeKey: key, chartCoin: coin});
 	  axios.get(url)
 	    .then(res => {
@@ -125,35 +137,35 @@ export default class App extends Component {
 	     });
 		}
 
-	getCoinData(key) {
-		const {navCoins} = this.state;
-		let url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+
-							navCoins.join()+"&tsyms="+navCoins[key];
-		this.setState({isLoading: true, coinData: false})
-		axios.get(url).then(res => {
-			 this.setState({ coinData: res.data, isLoading: false });
-		});
-	}
-
   /* Change coin shown on chart */
 	changeChartCoin(event) {
-    const { activeKey, } = this.state;
+    const { activeKey, chartDays } = this.state;
     this.setState({chartCoin: event.target.value});
     this.componentCleanup();
-    this.getChartData(event.target.value, activeKey);
+    this.getChartData(event.target.value, activeKey, chartDays);
+  }
+
+  /* Change days of chart */
+  changeChartDays(event) {
+    const {activeKey, chartCoin} = this.state;
+    let days = parseInt(event.target.value)
+    this.setState({ chartDays: days });
+    this.componentCleanup();
+    this.getChartData(chartCoin, activeKey, days);
   }
 
   /* Reset dashboard and chart to current coin */
   handleSelect(key) {
+    const {chartDays,} = this.state;
 		this.componentCleanup();
     this.getCoinData(key);
-    this.getChartData(key < 3 ? 'BTC' : 'USD', key);
+    this.getChartData(key < 3 ? 'BTC' : 'USD', key, chartDays);
 	}
 
   componentDidMount() {
-    const {activeKey} = this.state;
+    const {activeKey, chartDays} = this.state;
     this.getCoinData(0);
-    this.getChartData(activeKey < 3 ? 'BTC' : 'USD', activeKey);
+    this.getChartData(activeKey < 3 ? 'BTC' : 'USD', activeKey, chartDays);
   }
 
   componentWillUnmount(){
@@ -163,7 +175,7 @@ export default class App extends Component {
   }
 
   render() {
-  	const {activeKey, isLoading, coinData, navCoins, chartCoin} = this.state;
+  	const {activeKey, isLoading, coinData, navCoins, chartCoin, chartDays} = this.state;
   	const coinCols = [];
   	/* Create 4 item columns */
   	for (let i = 0; i < this.coins.length/4; i++) {
@@ -183,7 +195,11 @@ export default class App extends Component {
 								<DashBoardWithCoinData {...{coinData, coinCols, navCoins, activeKey}} />
 							</Tab>
 							<Tab eventKey={2} title="Statistics">								
-                <Chart {...{chartCoin, navCoins, onChange: this.changeChartCoin}} />
+                <Chart {...{chartCoin, navCoins, activeKey, chartDays,
+                    onCoinChange: this.changeChartCoin,
+                    onDaysChange: this.changeChartDays,
+                  }} 
+                />
 							</Tab>
 						</Tabs>
 					 </div>

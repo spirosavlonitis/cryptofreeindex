@@ -16,14 +16,10 @@ exports[`Chart snapshot 1`] = `
   >
     <select
       className="form-control"
+      onChange={[Function]}
       placeholder="select"
       value="BTC"
     >
-      <option
-        value="USD"
-      >
-        USD
-      </option>
       <option
         value="EUR"
       >

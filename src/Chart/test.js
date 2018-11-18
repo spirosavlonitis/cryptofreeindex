@@ -12,6 +12,8 @@ describe('Chart', () => {
   			'ETC', 'ZEC', 'DASH', 'XMR', 'DCR' 
   	],
   	chartCoin: 'BTC',
+  	activeKey: 0,
+  	onChange: () => 'foo',
 	};
 
 	it('renders without crashing', () =>{
