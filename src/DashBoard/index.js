@@ -37,7 +37,7 @@ DashBoard.propTypes = {
 		  ZEC: PropTypes.number.isRequired,
 		  DASH: PropTypes.number.isRequired,
 		  XMR: PropTypes.number.isRequired,
-		  DCR: PropTypes.number.isRequired 
+		  XRP: PropTypes.number.isRequired 
 		}),
 	}),
 	coinCols: PropTypes.arrayOf(

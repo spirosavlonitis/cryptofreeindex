@@ -39,7 +39,7 @@ export default class App extends Component {
 				{ id: "ZEC", color: "#f4b728", image: "ZEC_Logo.svg"},		
 				{ id: "DASH", color: "#2075bc", image: "DASH_Logo.png"}, 	
 				{ id: "XMR",	color: "#ff6600", image: "XMR_Logo.png"}, 	
-				{ id: "DCR",	color: "#62D0C9", image: "DCR_Logo.png" },
+				{ id: "XRP",	color: "#62D0C9", image: "xrp-symbol-white-128.png" },
 		];
     this.state 	= {
 		   	activeKey: 0,
