@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 import Image from 'react-bootstrap/lib/Image'
 
 
@@ -21,4 +22,37 @@ const DashBoard = ({coinData, coinCols, navCoins, activeKey}) => {
 		</div>
 	)
 }
+
+DashBoard.propTypes = {
+	coinData: PropTypes.shape({
+		USD: PropTypes.shape({
+			USD: PropTypes.number.isRequired,
+			EUR: PropTypes.number.isRequired,
+			GBP: PropTypes.number.isRequired,
+		  BTC: PropTypes.number.isRequired,
+		  LTC: PropTypes.number.isRequired,
+		  BCH: PropTypes.number.isRequired,
+		  ETH: PropTypes.number.isRequired,
+		  ETC: PropTypes.number.isRequired,
+		  ZEC: PropTypes.number.isRequired,
+		  DASH: PropTypes.number.isRequired,
+		  XMR: PropTypes.number.isRequired,
+		  DCR: PropTypes.number.isRequired 
+		}),
+	}),
+	coinCols: PropTypes.arrayOf(
+		PropTypes.arrayOf(
+			PropTypes.shape({
+					id: PropTypes.string.isRequired,
+					color: PropTypes.string.isRequired,
+					image: PropTypes.string.isRequired,
+			})
+		)
+	).isRequired,
+	navCoins: PropTypes.array.isRequired,
+	activeKey: PropTypes.number,
+}
+
 export default DashBoard;
+
+
