@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-class Ajax {
+export default class Ajax {
 
 	constructor() {
 		this.coins = [
@@ -54,5 +54,3 @@ class Ajax {
 	}
 
 }
-
-export default Ajax
