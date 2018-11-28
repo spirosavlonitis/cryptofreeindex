@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Image from 'react-bootstrap/lib/Image'
 
 const DashBoard = ({coinData, coinCols, navCoins, activeKey}) => {
-try{
+try{		/* Deal with multiple navbar clicks */
 	return(
 		<div>
 			{coinCols.map((coinCol, index) =>
