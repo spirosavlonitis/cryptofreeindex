@@ -22,7 +22,6 @@ try{		/* Deal with multiple navbar clicks */
 		</div>
 	)
 }catch (e) {
-	console.log(activeKey);
 	return null;
 }
 
