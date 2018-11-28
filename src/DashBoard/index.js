@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Image from 'react-bootstrap/lib/Image'
 
-
 const DashBoard = ({coinData, coinCols, navCoins, activeKey}) => {
+try{
 	return(
 		<div>
 			{coinCols.map((coinCol, index) =>
@@ -21,6 +21,11 @@ const DashBoard = ({coinData, coinCols, navCoins, activeKey}) => {
 			)}
 		</div>
 	)
+}catch (e) {
+	console.log(activeKey);
+	return null;
+}
+
 }
 
 DashBoard.propTypes = {
