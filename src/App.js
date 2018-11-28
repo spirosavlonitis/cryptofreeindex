@@ -29,8 +29,8 @@ export default class App extends Component {
     super(props);
     this.coins = [
     		{ id: "USD", color: "#339933", image: "USD_Logo.png" },
-				{ id: "EUR", color: "", image: "EUR_Logo.svg" },
-				{ id: "GBP", color: "", image: "GBP_Logo.png" },
+				{ id: "EUR", color: "#e4cc61", image: "EUR_Logo.svg" },
+				{ id: "GBP", color: "#a64dff", image: "GBP_Logo.png" },
 				{ id: "BTC", color: "#f2a900", image: "BTC_Logo.png"}, 
 				{ id: "LTC", color: "#d3d3d3", image: "LTC_Logo.png"}, 
 				{ id: "BCH", color: "#4cca47", image: "BCH_Logo.png"},
