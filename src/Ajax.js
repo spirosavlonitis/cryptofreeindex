@@ -5,7 +5,7 @@ export default class Ajax {
 	constructor() {
 		this.coins = [
 				"USD", "EUR", "GBP", "BTC", "LTC", "BCH", "ETH", "ETC", "ZEC", 
-				"DASH","XMR", "DCR",
+				"DASH","XMR", "XRP",
 			];
 		this.fiatCurrencies = [ "USD", "EUR", "GBP", ]
 		this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
@@ -22,15 +22,15 @@ export default class Ajax {
 	}
 
 	fiatRequest(reset) {
-		this.url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+this.coins.join()+"&tsyms="+this.currentCoin;
-		axios.get(this.url).then(res => {
-			for (let coin in res.data) {
-				let fontElement = document.getElementById('_'+coin)
-				let oldValue = parseFloat(fontElement.innerHTML);
-				let newValue = res.data[coin][this.currentCoin];
-				this.setValue(reset, fontElement, oldValue, newValue);
-			}
-		})		
+			this.url = "https://min-api.cryptocompare.com/data/pricemulti?fsyms="+this.coins.join()+"&tsyms="+this.currentCoin;
+			axios.get(this.url).then(res => {
+				for (let coin in res.data) {
+					let fontElement = document.getElementById('_'+coin)
+					let oldValue = parseFloat(fontElement.innerHTML);
+					let newValue = res.data[coin][this.currentCoin];
+					this.setValue(reset, fontElement, oldValue, newValue);
+				}
+			})
 	}
 
 	cryptoRequest(reset) {
