@@ -11,6 +11,8 @@ RUN apt-get update -y
 
 ADD . $APP/
 
+WORKDIR $APP
+
 RUN npm install
 
 CMD ["yarn", "start"]

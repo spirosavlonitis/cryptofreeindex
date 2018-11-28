@@ -34,12 +34,12 @@ export default class App extends Component {
 				{ id: "BTC", color: "#f2a900", image: "BTC_Logo.png"}, 
 				{ id: "LTC", color: "#d3d3d3", image: "LTC_Logo.png"}, 
 				{ id: "BCH", color: "#4cca47", image: "BCH_Logo.png"},
-				{ id: "ETH", color: "#3385ff", image: "ETH_Logo.png"}, 
+				{ id: "ETH", color: "#434c54", image: "ETH_Logo.png"}, 
 				{ id: "ETC", color: "#669073", image: "ETC_Logo.svg"}, 
 				{ id: "ZEC", color: "#f4b728", image: "ZEC_Logo.svg"},		
 				{ id: "DASH", color: "#2075bc", image: "DASH_Logo.png"}, 	
 				{ id: "XMR",	color: "#ff6600", image: "XMR_Logo.png"}, 	
-				{ id: "XRP",	color: "#62D0C9", image: "xrp-symbol-white-128.png" },
+				{ id: "XRP",	color: "#00aae4", image: "xrp-symbol-white-128.png" },
 		];
     this.state 	= {
 		   	activeKey: 0,
@@ -115,6 +115,7 @@ export default class App extends Component {
 
     dateAxis.renderer.grid.template.strokeOpacity = 0.07;
     valueAxis.renderer.grid.template.strokeOpacity = 0.07;
+
   }
 
   setChart(coin, res, days) {
