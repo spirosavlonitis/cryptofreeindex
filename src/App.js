@@ -194,10 +194,10 @@ export default class App extends Component {
   render() {
   	const {activeKey, isLoading, coinData, navCoins, chartCoin, chartDays} = this.state;
   	const coinCols = [];
-  	/* Create 4 item columns */
-  	for (let i = 0; i < this.coins.length/4; i++) {
+  	/* Create 5 item columns */
+  	for (let i = 0; i < this.coins.length/5; i++) {    // items
 			coinCols[i] = [];
-			for (let j = i, k = 0; j < i+10; j+= 3, k++)
+			for (let j = i, k = 0; j < i+this.coins.length-2; j+= 3, k++)
 				coinCols[i][k] = this.coins[j];
   	} 
     return (
