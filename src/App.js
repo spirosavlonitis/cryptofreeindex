@@ -40,6 +40,9 @@ export default class App extends Component {
 				{ id: "DASH", color: "#2075bc", image: "DASH_Logo.png"}, 	
 				{ id: "XMR",	color: "#ff6600", image: "XMR_Logo.png"}, 	
 				{ id: "XRP",	color: "#00aae4", image: "xrp-symbol-white-128.png" },
+        { id: "REP", color: "#4b0331", image: "augur-logo.png"},
+        { id: "BAT", color: "#A0A1B2", image: "bat.png"},
+        { id: "XLM", color: "#4e86d8", image: "xlm.png"},
 		];
     this.state 	= {
 		   	activeKey: 0,
