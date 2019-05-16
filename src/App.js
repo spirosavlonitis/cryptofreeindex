@@ -11,6 +11,7 @@ import Bar from './Bar'
 import DashBoard from './DashBoard'
 import Loading from './Loading'
 import Chart from './Chart'
+import Consent from './consent'
 
 am4core.useTheme(am4themes_animated);
 
@@ -221,7 +222,8 @@ export default class App extends Component {
 						</Tabs>
 					 </div>
         	</div>
-        </div>      
+        </div>
+        <Consent />
 			</div>
     );
   }
