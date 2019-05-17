@@ -5,10 +5,12 @@ export default class Ajax {
 	constructor() {
 		this.coins = [
 				"USD", "EUR", "GBP", "BTC", "LTC", "BCH", "ETH", "ETC", "ZEC", 
-				"DASH","XMR", "XRP",
+				"DASH","XMR", "XRP", "REP", "BAT", "XLM"
 			];
 		this.fiatCurrencies = [ "USD", "EUR", "GBP", ]
-		this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
+		//this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
+		this.currentCoin = this.coins[document.getElementById("basic-nav-dropdown").tabIndex];
+		console.log(this.currentCoin)
 	}
 
 	setValue(reset, fontElement, oldValue, newValue) {
@@ -46,7 +48,7 @@ export default class Ajax {
 	}
 
 	dashBoardRequest(reset = false) {
-		this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
+//		this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
 		if (this.fiatCurrencies.includes(this.currentCoin))
 			 this.fiatRequest(reset);
 		else
