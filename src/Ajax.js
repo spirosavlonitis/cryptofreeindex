@@ -9,7 +9,6 @@ export default class Ajax {
 			];
 		this.fiatCurrencies = [ "USD", "EUR", "GBP", ]
 		this.currentCoin = this.coins[document.getElementById("basic-nav-dropdown").tabIndex];
-		console.log(document.getElementById("basic-nav-dropdown").tabIndex)
 	}
 
 	setValue(reset, fontElement, oldValue, newValue) {
