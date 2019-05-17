@@ -8,9 +8,8 @@ export default class Ajax {
 				"DASH","XMR", "XRP", "REP", "BAT", "XLM"
 			];
 		this.fiatCurrencies = [ "USD", "EUR", "GBP", ]
-		//this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
 		this.currentCoin = this.coins[document.getElementById("basic-nav-dropdown").tabIndex];
-		console.log(this.currentCoin)
+		console.log(document.getElementById("basic-nav-dropdown").tabIndex)
 	}
 
 	setValue(reset, fontElement, oldValue, newValue) {
@@ -48,7 +47,7 @@ export default class Ajax {
 	}
 
 	dashBoardRequest(reset = false) {
-//		this.currentCoin = document.getElementsByClassName('active')[0].childNodes[0].innerText;
+		this.currentCoin = this.coins[document.getElementById("basic-nav-dropdown").tabIndex];
 		if (this.fiatCurrencies.includes(this.currentCoin))
 			 this.fiatRequest(reset);
 		else

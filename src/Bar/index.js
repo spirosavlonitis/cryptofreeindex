@@ -6,7 +6,6 @@ import Image from 'react-bootstrap/lib/Image';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 
 const Bar = ({activeKey, coins, onSelect}) => {
-
 	return(
 		<Navbar inverse >
 		  <Navbar.Header>
@@ -16,8 +15,8 @@ const Bar = ({activeKey, coins, onSelect}) => {
 		    <Navbar.Toggle />
 		  </Navbar.Header>
 		  <Navbar.Collapse>
-			  <Nav activeKey={activeKey } onSelect={onSelect}>
-				<NavDropdown title="Coins" id="basic-nav-dropdown">
+			  <Nav activeKey={activeKey} onSelect={onSelect}>
+				<NavDropdown title="Coins" id="basic-nav-dropdown" tabIndex={activeKey}>
 				{ coins.map((coin, index) =>
 						<NavItem eventKey={index} href="#" id={index} key={"NavItem"+coin.id} >
 						  <Image src= {"images/"+coin.image} className="NavImg" />{coin.id}
