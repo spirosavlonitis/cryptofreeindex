@@ -22,7 +22,7 @@ const Bar = ({activeKey, coins, onSelect}) => {
 						  <Image src= {"images/"+coin.image} className="NavImg" />{coin.id}
 						</NavItem>
 					)}
-		      	</NavDropdown>		 
+		      	</NavDropdown>
 				</Nav>
 		 </Navbar.Collapse>
 	</Navbar>

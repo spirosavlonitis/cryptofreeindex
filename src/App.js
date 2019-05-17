@@ -12,6 +12,7 @@ import DashBoard from './DashBoard'
 import Loading from './Loading'
 import Chart from './Chart'
 import Consent from './consent'
+import Notifications from './Notifications'
 
 am4core.useTheme(am4themes_animated);
 
@@ -200,7 +201,8 @@ export default class App extends Component {
 			coinCols[i] = [];
 			for (let j = i, k = 0; j < i+this.coins.length-2; j+= 3, k++)
 				coinCols[i][k] = this.coins[j];
-  	} 
+  	}
+    
     return (
     	<div>
     		{isLoading && <TopBarProgress />}
@@ -219,6 +221,9 @@ export default class App extends Component {
                   }} 
                 />
 							</Tab>
+              <Tab eventKey={3} title="Notifications">
+                <Notifications  />
+              </Tab>
 						</Tabs>
 					 </div>
         	</div>
