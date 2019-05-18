@@ -222,12 +222,17 @@ export default class App extends Component {
                 />
 							</Tab>
               <Tab eventKey={3} title="Notifications">
-                <Notifications  />
+                <Notifications {...{coins: this.coins, navCoins}} />
               </Tab>
 						</Tabs>
 					 </div>
         	</div>
         </div>
+        <audio id='sound' preload='auto'>
+            <source src='/sound.mp3' type='audio/mpeg' />
+            <source src='/sound.ogg' type='audio/ogg' />
+            <embed hidden='true' autostart='false' loop='false' src='/sound.mp3' />
+        </audio>
         <Consent />
 			</div>
     );
