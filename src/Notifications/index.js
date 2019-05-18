@@ -10,8 +10,12 @@ class Notifications extends React.Component {
     this.state = {
       ignore: true,
       title: '',
-      options: {},
-    };
+      options: {
+        lang: 'en',
+        dir: 'ltr',
+        sound: '/sound.mp3'  // no browsers supported https://developer.mozilla.org/en/docs/Web/API/notification/sound#Browser_compatibility
+      },
+    };    
 
   }
 
@@ -57,9 +61,10 @@ class Notifications extends React.Component {
 
   handleButtonClick = () => {
     const {ignore} = this.state
+    console.log(ignore)
     if(ignore)
       return;
-  
+
     const now = Date.now();
 
     const title = 'React-Web-Notification' + now;
@@ -74,15 +79,26 @@ class Notifications extends React.Component {
       tag,
       body,
       icon,
-      lang: 'en',
-      dir: 'ltr',
-      sound: '/sound.mp3'  // no browsers supported https://developer.mozilla.org/en/docs/Web/API/notification/sound#Browser_compatibility
     }
     this.setState({
       title,
-      options: options
+      options
     });
   }
+
+  getUSDPrices() {
+    console.log(this)
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(this.getUSDPrices, 60000);
+  }
+  
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+  
+
 
   render() {
     const {title, options, ignore} = this.state
