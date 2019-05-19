@@ -1,6 +1,8 @@
 import React from 'react';
 import Notification  from 'react-web-notification/lib/components/Notification';
 import axios from 'axios';
+import Image from 'react-bootstrap/lib/Image'
+import "./index.css";
 
 //allow react dev tools work
 //window.React = React;
@@ -17,7 +19,7 @@ class Notifications extends React.Component {
         sound: '/sound.mp3'  // no browsers supported https://developer.mozilla.org/en/docs/Web/API/notification/sound#Browser_compatibility
       },
       targetPrices: {
-        ETC: {above: 7.25, below: 7.25}
+        ETC: {above: 7.50, below: 7.00}
       }
     };
 
@@ -80,7 +82,7 @@ class Notifications extends React.Component {
             const title = targetCoin;            
             let body;
             if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above)
-              body = targetCoin+' above '+targetPrices[targetCoin].above
+              body = targetCoin+' above $ '+targetPrices[targetCoin].above
             else
               body = targetCoin+' below $ '+targetPrices[targetCoin].below
             const tag = Date.now();
@@ -131,6 +133,16 @@ class Notifications extends React.Component {
     return (
       <div>
         <button onClick={this.handleButtonClick}>Notif!</button>
+
+
+        {
+          this.coins.map(coin =>
+            <div>
+              <Image src={"/images/"+coin.image} className="notifImage" />
+              <br/><br/>
+            </div>
+          )
+        }
         <Notification
           ignore={ignore && title !== ''}
           notSupported={this.handleNotSupported.bind(this)}
