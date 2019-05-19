@@ -1,7 +1,7 @@
 import React from 'react';
 import Notification  from 'react-web-notification/lib/components/Notification';
 import axios from 'axios';
-import Image from 'react-bootstrap/lib/Image'
+import Image from 'react-bootstrap/lib/Image';
 import "./index.css";
 
 //allow react dev tools work
@@ -19,7 +19,7 @@ class Notifications extends React.Component {
         sound: '/sound.mp3'  // no browsers supported https://developer.mozilla.org/en/docs/Web/API/notification/sound#Browser_compatibility
       },
       targetPrices: {
-        ETC: {above: 7.50, below: 7.00}
+        ETC: {above: 7.75, below: 7.70}
       }
     };
 
@@ -80,12 +80,15 @@ class Notifications extends React.Component {
         if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above 
           || this.coinPrices[targetCoin] < targetPrices[targetCoin].below) {
             const title = targetCoin;            
-            let body;
-            if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above)
+            let body, tag;      // unique tag to prevent duplicate notifications
+            if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above){
               body = targetCoin+' above $ '+targetPrices[targetCoin].above
-            else
+              tag = targetCoin+' above '+targetPrices[targetCoin].above;
+            }else{
               body = targetCoin+' below $ '+targetPrices[targetCoin].below
-            const tag = Date.now();
+              tag = targetCoin+' below '+targetPrices[targetCoin].above;
+            }
+            
             let icon;
             this.coins.forEach( coin => {
               if (coin.id === targetCoin)
@@ -125,8 +128,6 @@ class Notifications extends React.Component {
   componentWillUnmount() {
     clearInterval(this.interval);
   }
-  
-
 
   render() {
     const {title, options, ignore} = this.state
@@ -136,7 +137,7 @@ class Notifications extends React.Component {
 
 
         {
-          this.coins.map(coin =>
+          this.coins.slice(1, this.coins.length).map(coin => 
             <div>
               <Image src={"/images/"+coin.image} className="notifImage" />
               <br/><br/>
