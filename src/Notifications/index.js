@@ -61,7 +61,7 @@ class Notifications extends React.Component {
   }
 
   handleNotificationOnShow(e, tag){
-    this.playSound();
+//    this.playSound();
 //    console.log(e, 'Notification shown tag:' + tag);
   }
 
@@ -75,19 +75,20 @@ class Notifications extends React.Component {
       return;
 
     for (let targetCoin in targetPrices)  {
-        console.log(this.coinPrices[targetCoin])
         if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above 
           || this.coinPrices[targetCoin] < targetPrices[targetCoin].below) {
-            const now = Date.now();
-            const title = 'React-Web-Notification' + now;
-            const body = 'Hello' + new Date();
-            const tag = now;
+            const title = targetCoin;            
+            let body;
+            if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above)
+              body = targetCoin+' above '+targetPrices[targetCoin].above
+            else
+              body = targetCoin+' below $ '+targetPrices[targetCoin].below
+            const tag = Date.now();
             let icon;
             this.coins.forEach( coin => {
               if (coin.id === targetCoin)
                 icon = "/images/"+coin.image
             } )
-            console.log(icon)
             // Available options
             // See https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
             const options = {
