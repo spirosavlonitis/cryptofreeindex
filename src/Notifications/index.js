@@ -49,7 +49,7 @@ class Notifications extends React.Component {
   }
 
   handleNotificationOnClick(e, tag){
-    console.log(e, 'Notification clicked tag:' + tag);
+//    console.log(e, 'Notification clicked tag:' + tag);
   }
 
   handleNotificationOnError(e, tag){
@@ -57,12 +57,12 @@ class Notifications extends React.Component {
   }
 
   handleNotificationOnClose(e, tag){
-    console.log(e, 'Notification closed tag:' + tag);
+  //  console.log(e, 'Notification closed tag:' + tag);
   }
 
   handleNotificationOnShow(e, tag){
     this.playSound();
-    console.log(e, 'Notification shown tag:' + tag);
+//    console.log(e, 'Notification shown tag:' + tag);
   }
 
   playSound(filename){
@@ -82,9 +82,12 @@ class Notifications extends React.Component {
             const title = 'React-Web-Notification' + now;
             const body = 'Hello' + new Date();
             const tag = now;
-            const icon = 'http://georgeosddev.github.io/react-web-notification/example/Notifications_button_24.png';
-            // const icon = 'http://localhost:3000/Notifications_button_24.png';
-
+            let icon;
+            this.coins.forEach( coin => {
+              if (coin.id === targetCoin)
+                icon = "/images/"+coin.image
+            } )
+            console.log(icon)
             // Available options
             // See https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
             const options = {
@@ -136,7 +139,7 @@ class Notifications extends React.Component {
           onClick={this.handleNotificationOnClick.bind(this)}
           onClose={this.handleNotificationOnClose.bind(this)}
           onError={this.handleNotificationOnError.bind(this)}
-          timeout={5000}
+          timeout={10000}
           title={title}
           options={options}
         />
