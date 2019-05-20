@@ -3,9 +3,9 @@ import Notification  from 'react-web-notification/lib/components/Notification';
 import axios from 'axios';
 import Image from 'react-bootstrap/lib/Image';
 import "./index.css";
+import Slider from 'react-rangeslider';
+import 'react-rangeslider/lib/index.css';
 
-//allow react dev tools work
-//window.React = React;
 
 class Notifications extends React.Component {
   constructor(props) {
@@ -19,12 +19,12 @@ class Notifications extends React.Component {
         sound: '/sound.mp3'  // no browsers supported https://developer.mozilla.org/en/docs/Web/API/notification/sound#Browser_compatibility
       },
       targetPrices: {
-        ETC: {above: 7.75, below: 7.70}
+        ETC: {above: 0, below: 7.70}
       }
     };
 
-    this.coinPrices = {};
     this.coins = props.coins;
+    this.coinPrices = {};
     this.api_key = "a63f5a0b90417a8c7dd8a72c4245176dee7288e9890642f1175835f65b04a523"
 
     this.apiURL ="https://min-api.cryptocompare.com/data/pricemulti?fsyms="+props.navCoins.join()+
@@ -75,11 +75,11 @@ class Notifications extends React.Component {
     const {ignore, targetPrices} = this.state
     if(ignore)
       return;
-
+    let title = ''
     for (let targetCoin in targetPrices)  {
-        if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above 
+        if ((this.coinPrices[targetCoin] > targetPrices[targetCoin].above && targetPrices[targetCoin].above !== 0)
           || this.coinPrices[targetCoin] < targetPrices[targetCoin].below) {
-            const title = targetCoin;            
+            title = targetCoin;            
             let body, tag;      // unique tag to prevent duplicate notifications
             if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above){
               body = targetCoin+' above $ '+targetPrices[targetCoin].above
@@ -103,9 +103,8 @@ class Notifications extends React.Component {
             }
             this.setState({
               title,
-              options
-            });
-            
+              options,
+            });          
           }
     }
 
@@ -115,31 +114,49 @@ class Notifications extends React.Component {
     axios.get(this.apiURL).then(res => {
         for (let coin in res.data)
           this.coinPrices[coin] = res.data[coin]['USD']
-        
-        this.handleButtonClick()
+    })    
+  }
+
+  checkForNotif = () => {
+       this.handleButtonClick()
+  }
+
+  handleOnAboveChange = (value, coin) => {
+    const {targetPrices} = this.state;
+    targetPrices[coin.id]['above'] = value;
+    this.setState({
+      targetPrices
     })
-    
   }
 
   componentDidMount() {
-    this.interval = setInterval(this.getUSDPrices.bind(this), 60000);
+    this.getUSDPrices()
+    this.notifInterval = setInterval(this.checkForNotif, 65000);
+    this.setPrices = setInterval(this.getUSDPrices.bind(this), 60000)
   }
   
   componentWillUnmount() {
     clearInterval(this.interval);
+    clearInterval(this.setPrices);
   }
 
   render() {
-    const {title, options, ignore} = this.state
+    const {title, options, ignore, targetPrices} = this.state
     return (
       <div>
         <button onClick={this.handleButtonClick}>Notif!</button>
-
-
         {
-          this.coins.slice(1, this.coins.length).map(coin => 
+          this.coins.slice(7, 8).map(coin => 
             <div>
               <Image src={"/images/"+coin.image} className="notifImage" />
+              <label value="Above" />
+              <Slider
+                min={this.coinPrices[coin.id]}
+                max={this.coinPrices[coin.id]+1000}
+                value={targetPrices[coin.id].above > 0 ? targetPrices[coin.id].above : this.coinPrices[coin.id]}
+                orientation="horizontal"
+                onChange={ (volume) => this.handleOnAboveChange(volume, coin)}
+              />              
               <br/><br/>
             </div>
           )
