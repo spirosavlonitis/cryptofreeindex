@@ -1,5 +1,22 @@
 .notifImage {
-	width: 30px;
-	height: 30px;
+	width: 200px;
+	height: 200px;
 }
 
+.post-container {
+    margin: 20px  0 0;
+    overflow: auto
+}
+.post-thumb {
+    float: left
+}
+.post-thumb img {
+    display: block
+}
+.post-content {
+    margin-left: 210px
+}
+.post-title {
+    font-weight: bold;
+    font-size: 200%
+}

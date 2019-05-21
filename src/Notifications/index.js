@@ -19,7 +19,7 @@ class Notifications extends React.Component {
         sound: '/sound.mp3'  // no browsers supported https://developer.mozilla.org/en/docs/Web/API/notification/sound#Browser_compatibility
       },
       targetPrices: {
-        ETC: {above: 0, below: 7.70}
+        ETC: {above: undefined, below: undefined}
       }
     };
 
@@ -77,7 +77,7 @@ class Notifications extends React.Component {
       return;
     let title = ''
     for (let targetCoin in targetPrices)  {
-        if ((this.coinPrices[targetCoin] > targetPrices[targetCoin].above && targetPrices[targetCoin].above !== 0)
+        if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above
           || this.coinPrices[targetCoin] < targetPrices[targetCoin].below) {
             title = targetCoin;            
             let body, tag;      // unique tag to prevent duplicate notifications
@@ -128,6 +128,14 @@ class Notifications extends React.Component {
       targetPrices
     })
   }
+  
+  handleOnBelowChange = (value, coin) => {
+    const {targetPrices} = this.state;
+    targetPrices[coin.id]['below'] = value;
+    this.setState({
+      targetPrices
+    })
+  }
 
   componentDidMount() {
     this.getUSDPrices()
@@ -141,22 +149,35 @@ class Notifications extends React.Component {
   }
 
   render() {
-    const {title, options, ignore, targetPrices} = this.state
+    const {title, options, ignore, targetPrices} = this.state    
     return (
       <div>
         <button onClick={this.handleButtonClick}>Notif!</button>
         {
           this.coins.slice(7, 8).map(coin => 
             <div>
-              <Image src={"/images/"+coin.image} className="notifImage" />
-              <label value="Above" />
-              <Slider
-                min={this.coinPrices[coin.id]}
-                max={this.coinPrices[coin.id]+1000}
-                value={targetPrices[coin.id].above > 0 ? targetPrices[coin.id].above : this.coinPrices[coin.id]}
-                orientation="horizontal"
-                onChange={ (volume) => this.handleOnAboveChange(volume, coin)}
-              />              
+              <div class="post-container">                
+                <div class="post-thumb"><Image src={"/images/"+coin.image} className="notifImage" /></div>
+                
+                <div class="post-content">
+                    <h3 className="post-title">Above</h3>
+                    <Slider
+                      min={this.coinPrices[coin.id]}
+                      max={this.coinPrices[coin.id]+1000}
+                      value={targetPrices[coin.id].above > 0 ? targetPrices[coin.id].above : this.coinPrices[coin.id]}
+                      orientation="horizontal"
+                      onChange={ (volume) => this.handleOnAboveChange(volume, coin)}
+                    />
+                    <h3 className="post-title" >Below</h3>
+                    <Slider
+                      min={0}
+                      max={this.coinPrices[coin.id]}
+                      value={targetPrices[coin.id].below > 0 ? targetPrices[coin.id].below : this.coinPrices[coin.id]}
+                      orientation="horizontal"
+                      onChange={ (volume) => this.handleOnBelowChange(volume, coin)}
+                    />
+                </div>
+              </div>
               <br/><br/>
             </div>
           )
