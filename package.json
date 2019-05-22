@@ -10,7 +10,6 @@
     "react-bootstrap": "^0.32.4",
     "react-cookie-consent": "^1.9.0",
     "react-dom": "^16.6.3",
-    "react-rangeslider": "^2.2.0",
     "react-redux": "^5.1.1",
     "react-redux-loading-bar": "^4.1.0",
     "react-scripts": "^2.1.1",

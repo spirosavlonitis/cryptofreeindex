@@ -3,13 +3,23 @@ import Notification  from 'react-web-notification/lib/components/Notification';
 import axios from 'axios';
 import Image from 'react-bootstrap/lib/Image';
 import "./index.css";
-import Slider from 'react-rangeslider';
-import 'react-rangeslider/lib/index.css';
+import Form from 'react-bootstrap/lib/Form';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import FormControl from 'react-bootstrap/lib/FormControl';
 
 
 class Notifications extends React.Component {
   constructor(props) {
     super(props);
+
+    this.coins = props.coins;
+    const targetPrices = {};
+    this.coins.forEach( coin => {
+      targetPrices[coin.id] = {above: undefined, below: undefined, on: false}
+    } )
+    
+
     this.state = {
       ignore: true,
       title: '',
@@ -18,12 +28,9 @@ class Notifications extends React.Component {
         dir: 'ltr',
         sound: '/sound.mp3'  // no browsers supported https://developer.mozilla.org/en/docs/Web/API/notification/sound#Browser_compatibility
       },
-      targetPrices: {
-        ETC: {above: undefined, below: undefined}
-      }
+      targetPrices
     };
 
-    this.coins = props.coins;
     this.coinPrices = {};
     this.api_key = "a63f5a0b90417a8c7dd8a72c4245176dee7288e9890642f1175835f65b04a523"
 
@@ -63,8 +70,7 @@ class Notifications extends React.Component {
   }
 
   handleNotificationOnShow(e, tag){
-//    this.playSound();
-//    console.log(e, 'Notification shown tag:' + tag);
+    this.playSound();
   }
 
   playSound(filename){
@@ -75,18 +81,20 @@ class Notifications extends React.Component {
     const {ignore, targetPrices} = this.state
     if(ignore)
       return;
+    console.log(targetPrices['ETC'], this.coinPrices['ETC']);
     let title = ''
     for (let targetCoin in targetPrices)  {
+        if (targetPrices[targetCoin].on === false)
+          continue;
         if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above
           || this.coinPrices[targetCoin] < targetPrices[targetCoin].below) {
+            
             title = targetCoin;            
-            let body, tag;      // unique tag to prevent duplicate notifications
+            let body;
             if (this.coinPrices[targetCoin] > targetPrices[targetCoin].above){
               body = targetCoin+' above $ '+targetPrices[targetCoin].above
-              tag = targetCoin+' above '+targetPrices[targetCoin].above;
             }else{
               body = targetCoin+' below $ '+targetPrices[targetCoin].below
-              tag = targetCoin+' below '+targetPrices[targetCoin].above;
             }
             
             let icon;
@@ -94,6 +102,8 @@ class Notifications extends React.Component {
               if (coin.id === targetCoin)
                 icon = "/images/"+coin.image
             } )
+
+            const tag = Date.now();
             // Available options
             // See https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
             const options = {
@@ -107,7 +117,6 @@ class Notifications extends React.Component {
             });          
           }
     }
-
   }
 
   getUSDPrices() {
@@ -121,17 +130,25 @@ class Notifications extends React.Component {
        this.handleButtonClick()
   }
 
-  handleOnAboveChange = (value, coin) => {
+  handleOnAboveChange = (e, coin) => {
     const {targetPrices} = this.state;
-    targetPrices[coin.id]['above'] = value;
+    targetPrices[coin.id]['above'] = e.target.value;
     this.setState({
       targetPrices
     })
   }
   
-  handleOnBelowChange = (value, coin) => {
+  handleOnBelowChange = (e, coin) => {
     const {targetPrices} = this.state;
-    targetPrices[coin.id]['below'] = value;
+    targetPrices[coin.id]['below'] = e.target.value;
+    this.setState({
+      targetPrices
+    })
+  }
+
+  setNotify = (e ,coin) => {
+    const {targetPrices} = this.state;
+    targetPrices[coin].on = !targetPrices[coin].on
     this.setState({
       targetPrices
     })
@@ -158,24 +175,39 @@ class Notifications extends React.Component {
             <div>
               <div class="post-container">                
                 <div class="post-thumb"><Image src={"/images/"+coin.image} className="notifImage" /></div>
-                
                 <div class="post-content">
-                    <h3 className="post-title">Above</h3>
-                    <Slider
-                      min={this.coinPrices[coin.id]}
-                      max={this.coinPrices[coin.id]+1000}
-                      value={targetPrices[coin.id].above > 0 ? targetPrices[coin.id].above : this.coinPrices[coin.id]}
-                      orientation="horizontal"
-                      onChange={ (volume) => this.handleOnAboveChange(volume, coin)}
-                    />
-                    <h3 className="post-title" >Below</h3>
-                    <Slider
-                      min={0}
-                      max={this.coinPrices[coin.id]}
-                      value={targetPrices[coin.id].below > 0 ? targetPrices[coin.id].below : this.coinPrices[coin.id]}
-                      orientation="horizontal"
-                      onChange={ (volume) => this.handleOnBelowChange(volume, coin)}
-                    />
+                    <Form>
+                      <FormGroup>
+                        <ControlLabel className="post-title" >Above</ControlLabel>
+                        <FormControl
+                          value={targetPrices[coin.id].above}
+                          placeholder={this.coinPrices[coin.id]}
+                          onChange={ (e) => this.handleOnAboveChange(e, coin)}
+                        />
+                      </FormGroup>
+                      <FormGroup>
+                        <ControlLabel className="post-title" >Below</ControlLabel>
+                        <FormControl
+                          value={targetPrices[coin.id].below}
+                          placeholder={this.coinPrices[coin.id]}
+                          onChange={ (e) => this.handleOnBelowChange(e, coin)}
+                        />
+                      </FormGroup>
+                    </Form>
+                    <div>
+                      <ControlLabel className="switchLabel" >Notify</ControlLabel>
+                      <label className="switch">
+                        <input type="checkbox" />
+                      </label>
+                      <b className="switchText" >OFF</b>
+                      <label className="switch">
+                        <input type="checkbox"
+                          onClick={ (event) => this.setNotify(event, coin.id)}
+                        />
+                        <span className="slider round"></span>
+                      </label>
+                      <b className="switchText" >ON</b>
+                    </div>
                 </div>
               </div>
               <br/><br/>
