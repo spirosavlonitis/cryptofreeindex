@@ -19,7 +19,6 @@ class Notifications extends React.Component {
       targetPrices[coin.id] = {above: undefined, below: undefined, on: false}
     } )
     
-
     this.state = {
       ignore: true,
       title: '',
@@ -81,7 +80,6 @@ class Notifications extends React.Component {
     const {ignore, targetPrices} = this.state
     if(ignore)
       return;
-    console.log(targetPrices['ETC'], this.coinPrices['ETC']);
     let title = ''
     for (let targetCoin in targetPrices)  {
         if (targetPrices[targetCoin].on === false)
@@ -156,8 +154,8 @@ class Notifications extends React.Component {
 
   componentDidMount() {
     this.getUSDPrices()
-    this.notifInterval = setInterval(this.checkForNotif, 65000);
-    this.setPrices = setInterval(this.getUSDPrices.bind(this), 60000)
+    this.notifInterval = setInterval(this.checkForNotif, 15000);
+    this.setPrices = setInterval(this.getUSDPrices.bind(this), 10000)
   }
   
   componentWillUnmount() {
@@ -171,7 +169,7 @@ class Notifications extends React.Component {
       <div>
         <button onClick={this.handleButtonClick}>Notif!</button>
         {
-          this.coins.slice(7, 8).map(coin => 
+          this.coins.slice(3, this.coins.length).map(coin => 
             <div>
               <div class="post-container">                
                 <div class="post-thumb"><Image src={"/images/"+coin.image} className="notifImage" /></div>
