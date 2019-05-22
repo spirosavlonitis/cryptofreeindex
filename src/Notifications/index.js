@@ -80,6 +80,7 @@ class Notifications extends React.Component {
     const {ignore, targetPrices} = this.state
     if(ignore)
       return;
+//    console.log(targetPrices['ETC'], this.coinPrices['ETC']);
     let title = ''
     for (let targetCoin in targetPrices)  {
         if (targetPrices[targetCoin].on === false)
