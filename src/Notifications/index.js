@@ -8,7 +8,6 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import FormControl from 'react-bootstrap/lib/FormControl';
 
-
 class Notifications extends React.Component {
   constructor(props) {
     super(props);
@@ -76,7 +75,7 @@ class Notifications extends React.Component {
     document.getElementById('sound').play();
   }
 
-  handleButtonClick = () => {
+  checkForNotif(){
     const {ignore, targetPrices} = this.state
     if(ignore)
       return;
@@ -101,7 +100,6 @@ class Notifications extends React.Component {
               if (coin.id === targetCoin)
                 icon = "/images/"+coin.image
             } )
-
             const tag = Date.now();
             // Available options
             // See https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
@@ -123,10 +121,6 @@ class Notifications extends React.Component {
         for (let coin in res.data)
           this.coinPrices[coin] = res.data[coin]['USD']
     })    
-  }
-
-  checkForNotif = () => {
-       this.handleButtonClick()
   }
 
   handleOnAboveChange = (e, coin) => {
@@ -155,7 +149,7 @@ class Notifications extends React.Component {
 
   componentDidMount() {
     this.getUSDPrices()
-    this.notifInterval = setInterval(this.checkForNotif, 15000);
+    this.notifInterval = setInterval(this.checkForNotif.bind(this), 15000);
     this.setPrices = setInterval(this.getUSDPrices.bind(this), 10000)
   }
   
@@ -168,13 +162,12 @@ class Notifications extends React.Component {
     const {title, options, ignore, targetPrices} = this.state    
     return (
       <div>
-        <button onClick={this.handleButtonClick}>Notif!</button>
         {
-          this.coins.slice(3, this.coins.length).map(coin => 
-            <div>
-              <div class="post-container">                
-                <div class="post-thumb"><Image src={"/images/"+coin.image} className="notifImage" /></div>
-                <div class="post-content">
+          this.coins.slice(3, this.coins.length).map((coin, i) => 
+            <div key={coin.id+"_i"} >
+              <div className="post-container">                
+                <div className="post-thumb"><Image src={"/images/"+coin.image} className="notifImage" /></div>
+                <div className="post-content">
                     <Form>
                       <FormGroup>
                         <ControlLabel className="post-title" >Above</ControlLabel>
